@@ -8,7 +8,7 @@ public class MemoryComponent extends JComponent
 {
     private Board gameBoard;
     private EnumMap<Tiles, Color> colourMap;
-    private final static int SQUARE_SIZE = 30;
+    private final static int SQUARE_SIZE = 100;
 
     public MemoryComponent(final Board gameBoard) {
 	this.gameBoard = gameBoard;
@@ -16,6 +16,7 @@ public class MemoryComponent extends JComponent
 	fillMapColour();
     }
 
+    @Override
     public Dimension getPreferredSize() {
 	int width = SQUARE_SIZE * gameBoard.getWidth();
 	int height = SQUARE_SIZE * gameBoard.getHeight();
@@ -47,15 +48,16 @@ public class MemoryComponent extends JComponent
         Graphics2D g2d = (Graphics2D) g;
 
         int height = gameBoard.getHeight();
-        // height == row
+        // height == row == y
        	int width = gameBoard.getWidth();
-        // width == column
+        // width == column == x
 
 
         for (int row = 0; row < height; row++) {
             for (int column = 0; column < width; column++) {
 
                 Tiles currentTile = gameBoard.getTile(row, column);
+                System.out.println("Tile" + gameBoard.getTile(row, column));
 
                 g2d.setColor(colourMap.get(currentTile));
                 g2d.drawRect(column * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);

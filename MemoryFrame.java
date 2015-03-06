@@ -1,44 +1,42 @@
 package se.liu.ida.linbe810.tddd78.memory;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 
 
-public class MemoryFrame extends JFrame
+public class MemoryFrame extends JFrame implements MouseListener
 {
     private Board gameBoard;
     private JFrame frame;
-    GridLayout gridL;
+    private MemoryComponent memoryComp;
 
 
-    public MemoryFrame(final Board gameBoard) throws HeadlessException {
+    public MemoryFrame(final Board gameBoard) {
 	super("MyMemories");
 	this.gameBoard = gameBoard;
+	memoryComp = new MemoryComponent(gameBoard);
+	this.frame = new JFrame("Memory");
+
+
 	int height = gameBoard.getHeight();
 	int width = gameBoard.getWidth();
 
-	this.frame = new JFrame("Memory");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	createMenus();
 
-	JLabel yellowLabel = new JLabel();
-	yellowLabel.setOpaque(true);
-	yellowLabel.setBackground(new Color(248, 213, 131));
- 	yellowLabel.setPreferredSize(getPreferredSize());
-
-	MemoryComponent memoryComp = new MemoryComponent(gameBoard);
-
 	frame.setLayout(new BorderLayout());
 	frame.getContentPane().add(memoryComp, BorderLayout.CENTER);
-
+	frame.getContentPane().addMouseListener(this);
 	frame.pack();
 	frame.setVisible(true);
 
+
 	final Action doOneStep = new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
-		// Action i spelet
 	    }
 	};
 
@@ -92,6 +90,31 @@ public class MemoryFrame extends JFrame
 	frame.setJMenuBar(menuBar);
     }
 
+
+    @Override public void mouseClicked(final MouseEvent e) {
+
+    }
+
+    @Override public void mousePressed(final MouseEvent e) {
+	int xCoord = e.getX();
+	int yCoord = e.getY();
+	int size = 100;
+	System.out.println("Coord: " + xCoord + ":" + yCoord);
+	System.out.println("x: " + xCoord/size + ", y: " + yCoord/size);
+	System.out.println(gameBoard.getTile(yCoord/size, xCoord/size));
+    }
+
+    @Override public void mouseReleased(final MouseEvent e) {
+
+    }
+
+    @Override public void mouseEntered(final MouseEvent e) {
+
+    }
+
+    @Override public void mouseExited(final MouseEvent e) {
+
+    }
 }
 
 	//private JTextArea textArea;
@@ -100,14 +123,28 @@ public class MemoryFrame extends JFrame
 	//textArea.setFont(font);
 	//textArea.setText(BoardToTextConverter.convertToText(gameBoard));
 
-/** GRIDLAYOUT!!!
-gridL = new GridLayout(height, width);
-JPanel memoryPanel = new JPanel(gridL);
-frame.add(memoryPanel);
-for (int h = 0; h < height-2; h++) {
-    for (int w = 0; w < width-2; w++) {
-	JButton b = new JButton(Integer.toString(h*w));
- 		memoryPanel.add(b);
-    }
-}
+
+/**
+JLabel yellowLabel = new JLabel();
+yellowLabel.setOpaque(true);
+yellowLabel.setBackground(new Color(248, 213, 131));
+	yellowLabel.setPreferredSize(getPreferredSize());
+
+
+
+ private ArrayList<TileButton> myButtons;
+
+ memoryPanel.setSize(getPreferredSize());
+	memoryPanel.setLayout(new GridLayout(4, 4));
+
+	for (int h = 0; h < height; h++) {
+		    for (int w = 0; w < width; w++) {
+			TileButton button = new TileButton();
+			button.setBackground(memoryComp.fillButton(gameBoard, h, w));
+			button.setOpaque(true);
+		 	memoryPanel.add(button);
+			addButton(button);
+		    }
+		}
+
  */
