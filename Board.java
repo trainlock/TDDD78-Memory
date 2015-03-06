@@ -24,7 +24,6 @@ public class Board
 	myList = new ArrayList<Tiles>(tileList);
 	myList.addAll(temp);
 	Collections.shuffle(myList);
-	System.out.println(myList.size());
 
 	this.square = new Tiles[height][width];
 	for (int h = 0; h < height; h++) {
