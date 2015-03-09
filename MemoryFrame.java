@@ -12,6 +12,10 @@ public class MemoryFrame extends JFrame implements MouseListener
     private Board gameBoard;
     private JFrame frame;
     private MemoryComponent memoryComp;
+    private Tiles t1, t2;
+    private int x, y;
+    private boolean[][] isTurnedUp;
+
 
 
     public MemoryFrame(final Board gameBoard) {
@@ -20,9 +24,10 @@ public class MemoryFrame extends JFrame implements MouseListener
 	memoryComp = new MemoryComponent(gameBoard);
 	this.frame = new JFrame("Memory");
 
-
 	int height = gameBoard.getHeight();
 	int width = gameBoard.getWidth();
+
+	setStartTileValue(height, width);
 
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -43,6 +48,14 @@ public class MemoryFrame extends JFrame implements MouseListener
 	final Timer clockTimer = new Timer(500, doOneStep);
 	clockTimer.setCoalesce(true);
 	clockTimer.start();
+    }
+
+    public void setStartTileValue(int height, int width) {
+	for (int h = 0; h < height; h++) {
+	    for (int w = 0; w < width; w++) {
+		isTurnedUp[h][w] = false;
+	    }
+	}
     }
 
     private void createMenus() {
@@ -90,6 +103,20 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setJMenuBar(menuBar);
     }
 
+    private void resetTile(){
+	t1 = null;
+	System.out.println("t1_null : " +  t1);
+	t2 = null;
+	System.out.println("t2_ null : " +  t2);
+    }
+
+    public void fillSameTile(int curY, int curX){
+	if (gameBoard.isSameTile(t1, t2)) {
+	    memoryComp.fillBacksideOfTile(y, x);
+	    memoryComp.fillBacksideOfTile(curY, curX);
+	}
+    }
+
 
     @Override public void mouseClicked(final MouseEvent e) {
 
@@ -98,10 +125,28 @@ public class MemoryFrame extends JFrame implements MouseListener
     @Override public void mousePressed(final MouseEvent e) {
 	int xCoord = e.getX();
 	int yCoord = e.getY();
-	int size = 100;
-	System.out.println("Coord: " + xCoord + ":" + yCoord);
-	System.out.println("x: " + xCoord/size + ", y: " + yCoord/size);
-	System.out.println(gameBoard.getTile(yCoord/size, xCoord/size));
+	int size = memoryComp.getSquareSize();
+	int curX = xCoord/size;
+	int curY = yCoord/size;
+	if (t1 == null) {
+	    t1 = gameBoard.getTile(curY, curX);
+	    x = curX;
+	    y = curY;
+	} else if (t2 == null) {
+	    if (curX != x || curY != y) {
+		t2 = gameBoard.getTile(curY, curX);
+		fillSameTile(curY, curX);
+		resetTile();
+	    } else {
+		System.out.println("DON'T PRESS THE SAME TILE!");
+		resetTile();
+	    }
+	}
+	else {
+	    //Vad som händer när det inte är ett matchande par.
+	    //De ska vändas tillbaka.
+
+	}
     }
 
     @Override public void mouseReleased(final MouseEvent e) {
@@ -115,6 +160,7 @@ public class MemoryFrame extends JFrame implements MouseListener
     @Override public void mouseExited(final MouseEvent e) {
 
     }
+
 }
 
 	//private JTextArea textArea;
