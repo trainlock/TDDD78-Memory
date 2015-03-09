@@ -8,7 +8,8 @@ public class MemoryComponent extends JComponent
 {
     private Board gameBoard;
     private EnumMap<Tiles, Color> colourMap;
-    private final static int SQUARE_SIZE = 100;
+    private Graphics g;
+    public final static int SQUARE_SIZE = 100;
 
     public MemoryComponent(final Board gameBoard) {
 	this.gameBoard = gameBoard;
@@ -24,9 +25,11 @@ public class MemoryComponent extends JComponent
         return new Dimension(width, height);
     }
 
-    @Override public void paintComponent(Graphics g) {
+    @Override
+    public void paintComponent(Graphics g) {
 	super.paintComponent(g);
 	fillBoardColour(gameBoard, g);
+
     }
 
     public void fillMapColour() {
@@ -40,8 +43,9 @@ public class MemoryComponent extends JComponent
 	colourMap.put(Tiles.F, Color.CYAN);
 	colourMap.put(Tiles.G, Color.PINK);
 	colourMap.put(Tiles.H, Color.MAGENTA);
-	colourMap.put(Tiles.BACKSIDE, Color.WHITE);
-	colourMap.put(Tiles.OUTSIDE, Color.GRAY);
+	colourMap.put(Tiles.BACKSIDE, Color.LIGHT_GRAY);
+	colourMap.put(Tiles.OUTSIDE, Color.BLACK);
+
     }
 
     public void fillBoardColour(Board gameBoard, Graphics g) {
@@ -57,7 +61,6 @@ public class MemoryComponent extends JComponent
             for (int column = 0; column < width; column++) {
 
                 Tiles currentTile = gameBoard.getTile(row, column);
-                System.out.println("Tile" + gameBoard.getTile(row, column));
 
                 g2d.setColor(colourMap.get(currentTile));
                 g2d.drawRect(column * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
@@ -65,4 +68,21 @@ public class MemoryComponent extends JComponent
             }
         }
     }
+
+    public int getSquareSize() {
+        return SQUARE_SIZE;
+    }
+
+    public void fillBacksideOfTile(int row, int column) {
+        Graphics g = this.getGraphics();
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(colourMap.get(Tiles.BACKSIDE));
+        g2d.drawRect(column * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        g2d.fillRect(column * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+    }
 }
+
+
+
+
+

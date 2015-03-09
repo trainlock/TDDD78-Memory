@@ -7,11 +7,12 @@ import java.util.List;
 
 public class Board
 {
-    private Tiles[][] square;
+    public Tiles[][] square;
     private int height, width;
     private List<Tiles> tileList;
     private List <Tiles> temp;
     private List <Tiles> myList;
+    private boolean[][] isUp;
 
     public Board(int height, int width) {
 	this.height = height;
@@ -40,6 +41,7 @@ public class Board
     }
 
 
+
     public int getHeight() {
 	return height;
     }
@@ -52,10 +54,6 @@ public class Board
 	return square[height][width];
     }
 
-    public Tiles getCoord(Tiles A) {
-	return Tiles.A;
-    }
-
     public int nrOfTiles(){
 	return myList.size();
     }
@@ -65,6 +63,15 @@ public class Board
 	myList.remove(0);
 	return myTile;
 	}
+
+    public boolean isSameTile(Tiles t1, Tiles t2){
+	System.out.println("Same tile "+t1.equals(t2));
+	return t1.equals(t2);
+    }
+
+    public void flipTile(int x, int y){
+
+        }
     }
 
 /**
