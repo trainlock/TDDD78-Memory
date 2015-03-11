@@ -28,7 +28,6 @@ public class MemoryFrame extends JFrame implements MouseListener
 	int width = gameBoard.getWidth();
 
 	setStartTileValue(height, width);
-
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	createMenus();
@@ -36,6 +35,7 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setLayout(new BorderLayout());
 	frame.getContentPane().add(memoryComp, BorderLayout.CENTER);
 	frame.getContentPane().addMouseListener(this);
+	frame.setResizable(false);
 	frame.pack();
 	frame.setVisible(true);
 
@@ -51,9 +51,13 @@ public class MemoryFrame extends JFrame implements MouseListener
     }
 
     public void setStartTileValue(int height, int width) {
+	isTurnedUp = new boolean[height][width];
 	for (int h = 0; h < height; h++) {
 	    for (int w = 0; w < width; w++) {
-		isTurnedUp[h][w] = false;
+		isTurnedUp[h][w] = true;
+		//System.out.println(h+" "+w+" "+isTurnedUp[h][w]);
+
+		System.out.println("Hej");
 	    }
 	}
     }
@@ -105,18 +109,83 @@ public class MemoryFrame extends JFrame implements MouseListener
 
     private void resetTile(){
 	t1 = null;
-	System.out.println("t1_null : " +  t1);
 	t2 = null;
-	System.out.println("t2_ null : " +  t2);
     }
 
     public void fillSameTile(int curY, int curX){
-	if (gameBoard.isSameTile(t1, t2)) {
-	    memoryComp.fillBacksideOfTile(y, x);
-	    memoryComp.fillBacksideOfTile(curY, curX);
+	memoryComp.fillBacksideOfTile(y, x);
+	memoryComp.fillBacksideOfTile(curY, curX);
+    }
+
+    public void turnTile(int curY, int curX) {
+	if (gameBoard.isSameTile(t1, t2) && isTurnedUp[curY][curX] && isTurnedUp[y][x]) {
+	    fillSameTile(curY, curX);
+	    // Fyller två tiles som är av samma sort med ljuwgrå färg.
+	}
+	else {
+	    if (isTurnedUp[y][x] && isTurnedUp[curY][curX]) {
+		// Om isTurnedUp == false, (nedvänd)
+		// för första och andra tiles -->
+		// fyller grått.
+		memoryComp.fillCurTile(y, x);
+		memoryComp.fillCurTile(curY, curX);
+		// Sätter att tilen är isTurnedUp == true, (uppvänd)
+		isTurnedUp[y][x] = false;
+		isTurnedUp[curY][curX] = false;
+	    }
+	    else {
+		// Kommer aldrig in i else-satsen.
+		System.out.println("Bananer");
+		// Om de inte är isTurnedUp == true, (uppvänd)
+		// för första och andra tiles -->
+		// fyller med färg.
+		memoryComp.fillTile(y, x);
+		memoryComp.fillTile(curY, curX);
+		isTurnedUp[y][x] = true;
+		isTurnedUp[curY][curX] = true;
+	    }
 	}
     }
 
+    // VIKTIGT BYT METODNAMN!!!!
+    public void yolo(int xCoord, int yCoord){
+	// VIKTIGT BYT METODNAMN!!!!
+	int size = memoryComp.getSquareSize();
+	int curX = xCoord/size;
+	int curY = yCoord/size;
+	if (t1 == null) {
+	    t1 = gameBoard.getTile(curY, curX);
+	    // Hämtar den första tilen som är tryckt.
+	    x = curX;
+	    y = curY;
+	}
+	else if (t2 == null) {
+	    if (curX != x || curY != y) {
+		// Om det inte är samma tiles gör den detta.
+		t2 = gameBoard.getTile(curY, curX);
+		// Hämtar den andra tilen som är tryckt.
+		if(isTurnedUp[curY][curX]) {
+		    turnTile(curY, curX);
+		}
+		else if(!isTurnedUp[curY][curX]){
+		    turnTile(curY, curX);
+		}
+
+		// Vänder två valda tiles.
+		resetTile();
+		// Sätter valda tiles till null.
+	    }
+	    else {
+		System.out.println("DON'T PRESS THE SAME TILE!");
+		JOptionPane.showMessageDialog(this, "Do not press the same tile twice, retard!");
+		resetTile();
+	    }
+	}
+	else {
+	    //Vad som händer när det inte är ett matchande par.
+	    //De ska vändas tillbaka.
+	}
+    }
 
     @Override public void mouseClicked(final MouseEvent e) {
 
@@ -125,28 +194,8 @@ public class MemoryFrame extends JFrame implements MouseListener
     @Override public void mousePressed(final MouseEvent e) {
 	int xCoord = e.getX();
 	int yCoord = e.getY();
-	int size = memoryComp.getSquareSize();
-	int curX = xCoord/size;
-	int curY = yCoord/size;
-	if (t1 == null) {
-	    t1 = gameBoard.getTile(curY, curX);
-	    x = curX;
-	    y = curY;
-	} else if (t2 == null) {
-	    if (curX != x || curY != y) {
-		t2 = gameBoard.getTile(curY, curX);
-		fillSameTile(curY, curX);
-		resetTile();
-	    } else {
-		System.out.println("DON'T PRESS THE SAME TILE!");
-		resetTile();
-	    }
-	}
-	else {
-	    //Vad som händer när det inte är ett matchande par.
-	    //De ska vändas tillbaka.
-
-	}
+	// VIKTIGT BYT METODNAMN!!!!
+	yolo(xCoord, yCoord);
     }
 
     @Override public void mouseReleased(final MouseEvent e) {

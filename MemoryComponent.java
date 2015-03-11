@@ -10,6 +10,7 @@ public class MemoryComponent extends JComponent
     private EnumMap<Tiles, Color> colourMap;
     private Graphics g;
     public final static int SQUARE_SIZE = 100;
+    public final static int SPACE = 10;
 
     public MemoryComponent(final Board gameBoard) {
 	this.gameBoard = gameBoard;
@@ -19,8 +20,8 @@ public class MemoryComponent extends JComponent
 
     @Override
     public Dimension getPreferredSize() {
-	int width = SQUARE_SIZE * gameBoard.getWidth();
-	int height = SQUARE_SIZE * gameBoard.getHeight();
+	int width = SQUARE_SIZE * gameBoard.getWidth() + SPACE * gameBoard.getWidth();
+	int height = SQUARE_SIZE * gameBoard.getHeight() + SPACE * gameBoard.getHeight();
         System.out.println("Widht: " + gameBoard.getWidth() + " Height :" + gameBoard.getHeight());
         return new Dimension(width, height);
     }
@@ -29,7 +30,6 @@ public class MemoryComponent extends JComponent
     public void paintComponent(Graphics g) {
 	super.paintComponent(g);
 	fillBoardColour(gameBoard, g);
-
     }
 
     public void fillMapColour() {
@@ -60,11 +60,11 @@ public class MemoryComponent extends JComponent
         for (int row = 0; row < height; row++) {
             for (int column = 0; column < width; column++) {
 
-                Tiles currentTile = gameBoard.getTile(row, column);
+                Tiles curTile = gameBoard.getTile(row, column);
 
-                g2d.setColor(colourMap.get(currentTile));
-                g2d.drawRect(column * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-                g2d.fillRect(column * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+                g2d.setColor(colourMap.get(curTile));
+                //g2d.drawRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
+                g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
             }
         }
     }
@@ -76,9 +76,25 @@ public class MemoryComponent extends JComponent
     public void fillBacksideOfTile(int row, int column) {
         Graphics g = this.getGraphics();
         Graphics2D g2d = (Graphics2D) g;
+
         g2d.setColor(colourMap.get(Tiles.BACKSIDE));
-        g2d.drawRect(column * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-        g2d.fillRect(column * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
+    }
+
+    public void fillTile(int row, int column) {
+        Graphics g = this.getGraphics();
+        Graphics2D g2d = (Graphics2D) g;
+        Tiles currentTile = gameBoard.getTile(row, column);
+
+        g2d.setColor(colourMap.get(currentTile));
+        g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
+    }
+
+    public void fillCurTile(int row, int column) {
+        Graphics g = this.getGraphics();
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
     }
 }
 

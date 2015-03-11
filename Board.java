@@ -10,36 +10,40 @@ public class Board
     public Tiles[][] square;
     private int height, width;
     private List<Tiles> tileList;
-    private List <Tiles> temp;
-    private List <Tiles> myList;
+    private List<Tiles> temp;
+    private List<Tiles> myList;
     private boolean[][] isUp;
 
     public Board(int height, int width) {
 	this.height = height;
 	this.width = width;
+	if (checkBoardSize()) {
+	    this.tileList = new ArrayList<Tiles>(Arrays.asList(Tiles.values()));
+	    tileList.remove(Tiles.BACKSIDE);
+	    tileList.remove(Tiles.OUTSIDE);
+	    temp = new ArrayList<Tiles>(tileList);
+	    myList = new ArrayList<Tiles>(tileList);
+	    myList.addAll(temp);
+	    Collections.shuffle(myList);
 
-	this.tileList = new ArrayList<Tiles>(Arrays.asList(Tiles.values()));
-	tileList.remove(Tiles.BACKSIDE);
-	tileList.remove(Tiles.OUTSIDE);
-	temp = new ArrayList<Tiles>(tileList);
-	myList = new ArrayList<Tiles>(tileList);
-	myList.addAll(temp);
-	Collections.shuffle(myList);
-
-	this.square = new Tiles[height][width];
-	for (int h = 0; h < height; h++) {
-	    for (int w = 0; w < width; w++) {
-		square[h][w] = getRndTile();
-		/**if (h == 0 || w == 0 || h == height - 1 || w == width - 1) {
-		    square[h][w] = Tiles.OUTSIDE;
-		} else {
+	    this.square = new Tiles[height][width];
+	    for (int h = 0; h < height; h++) {
+		for (int w = 0; w < width; w++) {
 		    square[h][w] = getRndTile();
-		}
-		 */
+		    /**if (h == 0 || w == 0 || h == height - 1 || w == width - 1) {
+		 	square[h][w] = Tiles.OUTSIDE;
+		 	} else {
+		 	square[h][w] = getRndTile();
+		 	}
+		 	*/
+	    	}
 	    }
 	}
+	else {
+	    // FELHANTERING!!!
+	    System.out.println("Incorrect size of Board!");
+	}
     }
-
 
 
     public int getHeight() {
@@ -54,25 +58,30 @@ public class Board
 	return square[height][width];
     }
 
-    public int nrOfTiles(){
+    public int nrOfTiles() {
 	return myList.size();
     }
 
-    public Tiles getRndTile(){
+    public Tiles getRndTile() {
 	Tiles myTile = myList.get(0);
 	myList.remove(0);
 	return myTile;
-	}
+    }
 
-    public boolean isSameTile(Tiles t1, Tiles t2){
-	System.out.println("Same tile "+t1.equals(t2));
+    public boolean isSameTile(Tiles t1, Tiles t2) {
+	System.out.println("Same tile " + t1.equals(t2));
 	return t1.equals(t2);
     }
 
-    public void flipTile(int x, int y){
-
-        }
+    public boolean checkBoardSize() {
+	if ((height * width) % 2 == 0 ) {
+	    return true;
+	}
+	return false;
     }
+}
+
+
 
 /**
     public boolean canBeSelected() {
