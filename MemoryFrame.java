@@ -14,7 +14,8 @@ public class MemoryFrame extends JFrame implements MouseListener
     private MemoryComponent memoryComp;
     private Tiles t1, t2;
     private int x, y;
-    private boolean[][] isTurnedUp;
+    public int copiedX, copiedY;
+    private TileState[][] isTurnedUp;
 
 
 
@@ -42,24 +43,32 @@ public class MemoryFrame extends JFrame implements MouseListener
 
 	final Action doOneStep = new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
+		//Tar bara ena
+		if (isTurnedUp[copiedY][copiedX] == TileState.IS_NOT_TURNED && isTurnedUp[y][x] == TileState.IS_NOT_TURNED) {
+		    isTurnedUp[copiedY][copiedX] = TileState.IS_TURNED;
+		    memoryComp.fillTile(copiedY, copiedX);
+		}
 	    }
 	};
 
-	final Timer clockTimer = new Timer(500, doOneStep);
+	final Timer clockTimer = new Timer(1500, doOneStep);
 	clockTimer.setCoalesce(true);
 	clockTimer.start();
     }
 
     public void setStartTileValue(int height, int width) {
-	isTurnedUp = new boolean[height][width];
+	isTurnedUp = new TileState[height][width];
 	for (int h = 0; h < height; h++) {
 	    for (int w = 0; w < width; w++) {
-		isTurnedUp[h][w] = true;
+		isTurnedUp[h][w] = TileState.IS_TURNED;
 		//System.out.println(h+" "+w+" "+isTurnedUp[h][w]);
-
-		System.out.println("Hej");
 	    }
 	}
+    }
+
+    public void setXYValues(int x, int y) {
+	this.copiedX = x;
+	this.copiedY = y;
     }
 
     private void createMenus() {
@@ -118,20 +127,33 @@ public class MemoryFrame extends JFrame implements MouseListener
     }
 
     public void turnTile(int curY, int curX) {
-	if (gameBoard.isSameTile(t1, t2) && isTurnedUp[curY][curX] && isTurnedUp[y][x]) {
+	if (gameBoard.isSameTile(t1, t2) && isTurnedUp[curY][curX] == TileState.IS_TURNED && isTurnedUp[y][x] == TileState.IS_TURNED) {
 	    fillSameTile(curY, curX);
 	    // Fyller två tiles som är av samma sort med ljuwgrå färg.
+	    isTurnedUp[curY][curX] = TileState.IS_SAME_TILE;
+	    isTurnedUp[y][x] = TileState.IS_SAME_TILE;
+	    // sätter så att tilen inte kan väljas igen.
+	    System.out.println("Kiwi");
 	}
 	else {
-	    if (isTurnedUp[y][x] && isTurnedUp[curY][curX]) {
+	    if (isTurnedUp[y][x] == TileState.IS_TURNED && isTurnedUp[curY][curX] == TileState.IS_TURNED) {
 		// Om isTurnedUp == false, (nedvänd)
 		// för första och andra tiles -->
 		// fyller grått.
 		memoryComp.fillCurTile(y, x);
 		memoryComp.fillCurTile(curY, curX);
 		// Sätter att tilen är isTurnedUp == true, (uppvänd)
-		isTurnedUp[y][x] = false;
-		isTurnedUp[curY][curX] = false;
+		isTurnedUp[y][x] = TileState.IS_NOT_TURNED;
+		isTurnedUp[curY][curX] = TileState.IS_NOT_TURNED;
+		// Timern ska automatiskt sätta NOT_TURNED till TURNED
+		System.out.println("Apelsiner");
+	    }
+	    else if (isTurnedUp[curY][curX] == TileState.IS_SAME_TILE || isTurnedUp[y][x] == TileState.IS_SAME_TILE ||
+		     isTurnedUp[y][x] == TileState.IS_TURNED && isTurnedUp[curY][curX] == TileState.IS_NOT_TURNED ||
+		     isTurnedUp[curY][curX] == TileState.IS_TURNED && isTurnedUp[y][x] == TileState.IS_NOT_TURNED) {
+		// Borde tillhöra felhanteringen och Exceptions
+		// Spelplanen ska ej komma åt dessa brickor!
+		System.out.println("Mango");
 	    }
 	    else {
 		// Kommer aldrig in i else-satsen.
@@ -141,8 +163,8 @@ public class MemoryFrame extends JFrame implements MouseListener
 		// fyller med färg.
 		memoryComp.fillTile(y, x);
 		memoryComp.fillTile(curY, curX);
-		isTurnedUp[y][x] = true;
-		isTurnedUp[curY][curX] = true;
+		isTurnedUp[y][x] = TileState.IS_TURNED;
+		isTurnedUp[curY][curX] = TileState.IS_TURNED;
 	    }
 	}
     }
@@ -151,6 +173,7 @@ public class MemoryFrame extends JFrame implements MouseListener
     public void yolo(int xCoord, int yCoord){
 	// VIKTIGT BYT METODNAMN!!!!
 	int size = memoryComp.getSquareSize();
+	// size tar inte med SPACE! Därför blir det mysko med mellanrummen
 	int curX = xCoord/size;
 	int curY = yCoord/size;
 	if (t1 == null) {
@@ -158,25 +181,26 @@ public class MemoryFrame extends JFrame implements MouseListener
 	    // Hämtar den första tilen som är tryckt.
 	    x = curX;
 	    y = curY;
+	    setXYValues(x, y);
 	}
 	else if (t2 == null) {
 	    if (curX != x || curY != y) {
 		// Om det inte är samma tiles gör den detta.
 		t2 = gameBoard.getTile(curY, curX);
 		// Hämtar den andra tilen som är tryckt.
-		if(isTurnedUp[curY][curX]) {
+		if(isTurnedUp[curY][curX] == TileState.IS_TURNED) {
 		    turnTile(curY, curX);
 		}
-		else if(!isTurnedUp[curY][curX]){
+		else if(isTurnedUp[curY][curX] == TileState.IS_NOT_TURNED){
 		    turnTile(curY, curX);
 		}
-
 		// Vänder två valda tiles.
 		resetTile();
 		// Sätter valda tiles till null.
 	    }
 	    else {
 		System.out.println("DON'T PRESS THE SAME TILE!");
+		// ÄNDRA TEXTEN RETARD!!!
 		JOptionPane.showMessageDialog(this, "Do not press the same tile twice, retard!");
 		resetTile();
 	    }
