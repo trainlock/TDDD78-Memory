@@ -28,12 +28,6 @@ public class Board
 	    for (int h = 0; h < height; h++) {
 		for (int w = 0; w < width; w++) {
 		    square[h][w] = getRndTile();
-		    /**if (h == 0 || w == 0 || h == height - 1 || w == width - 1) {
-		 	square[h][w] = Tiles.OUTSIDE;
-		 	} else {
-		 	square[h][w] = getRndTile();
-		 	}
-		 	*/
 	    	}
 	    }
 	}
@@ -42,7 +36,6 @@ public class Board
 	    System.out.println("Incorrect size of Board!");
 	}
     }
-
 
     public int getHeight() {
 	return height;
@@ -56,10 +49,6 @@ public class Board
 	return square[height][width];
     }
 
-    public int nrOfTiles() {
-	return myList.size();
-    }
-
     public Tiles getRndTile() {
 	Tiles myTile = myList.get(0);
 	myList.remove(0);
@@ -67,7 +56,6 @@ public class Board
     }
 
     public boolean isSameTile(Tiles t1, Tiles t2) {
-	System.out.println("Same tile " + t1.equals(t2));
 	return t1.equals(t2);
     }
 

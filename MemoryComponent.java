@@ -22,7 +22,6 @@ public class MemoryComponent extends JComponent
     public Dimension getPreferredSize() {
 	int width = SQUARE_SIZE * gameBoard.getWidth() + SPACE * gameBoard.getWidth();
 	int height = SQUARE_SIZE * gameBoard.getHeight() + SPACE * gameBoard.getHeight();
-        System.out.println("Widht: " + gameBoard.getWidth() + " Height :" + gameBoard.getHeight());
         return new Dimension(width, height);
     }
 
