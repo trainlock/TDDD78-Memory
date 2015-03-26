@@ -24,7 +24,7 @@ public final class BoardToTextConverter
 	return text;
     }
 
-    public StringBuilder tileConverter(Tiles tileType, StringBuilder sb) {
+    public StringBuilder tileConverter(TileTypes tileType, StringBuilder sb) {
 	switch (tileType) {
 	    case A:
 		sb.append("A");

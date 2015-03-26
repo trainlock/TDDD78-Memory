@@ -16,15 +16,14 @@ public class MemoryFrame extends JFrame implements MouseListener
 
     public MemoryFrame(final Board gameBoard) {
 	super("MyMemories");
-	memoryComp = new MemoryComponent(gameBoard);
-	tileManager = new TileActionManager(memoryComp, gameBoard);
-	this.frame = new JFrame("Memory");
-
+	// Kommer behöva var mycket större än det är nu!
 	int height = gameBoard.getHeight();
 	int width = gameBoard.getWidth();
 
+	memoryComp = new MemoryComponent(gameBoard);
+	tileManager = new TileActionManager(memoryComp, gameBoard);
 	tileManager.setStartTileValue(height, width);
-
+	this.frame = new JFrame("Memory");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	createMenus();
@@ -80,6 +79,12 @@ public class MemoryFrame extends JFrame implements MouseListener
 	menuBar.add(Box.createHorizontalGlue());
 	menuBar.add(quitButton);
 	frame.setJMenuBar(menuBar);
+    }
+
+    public void showWinMessage() {
+	if (tileManager.isAllSameTile()) {
+	    JOptionPane.showMessageDialog(this, "You have beaten the game! Congrats CHAMP!");
+	}
     }
 
     @Override public void mouseClicked(final MouseEvent e) {

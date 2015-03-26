@@ -10,7 +10,7 @@ public class TileActionManager
     private Timer clockTimer;
     public TileState[][] isTurnedUp;
     private int x, y, copiedX, copiedY, curX, curY;
-    private Tiles t1, t2;
+    private TileTypes t1, t2;
     public boolean boardEnabled = true;
     public static final int TIME = 2000;
 

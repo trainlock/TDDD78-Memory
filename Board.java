@@ -7,24 +7,24 @@ import java.util.List;
 
 public class Board
 {
-    public Tiles[][] square;
+    public TileTypes[][] square;
     private int height, width;
-    private List<Tiles> temp;
-    private List<Tiles> myList;
+    private List<TileTypes> temp;
+    private List<TileTypes> myList;
 
     public Board(int height, int width) {
 	this.height = height;
 	this.width = width;
 	if (checkBoardSize()) {
-	    final List<Tiles> tileList = new ArrayList<Tiles>(Arrays.asList(Tiles.values()));
-	    tileList.remove(Tiles.BACKSIDE);
-	    tileList.remove(Tiles.OUTSIDE);
-	    temp = new ArrayList<Tiles>(tileList);
-	    myList = new ArrayList<Tiles>(tileList);
+	    final List<TileTypes> tileList = new ArrayList<TileTypes>(Arrays.asList(TileTypes.values()));
+	    tileList.remove(TileTypes.BACKSIDE);
+	    tileList.remove(TileTypes.OUTSIDE);
+	    temp = new ArrayList<TileTypes>(tileList);
+	    myList = new ArrayList<TileTypes>(tileList);
 	    myList.addAll(temp);
 	    Collections.shuffle(myList);
 
-	    this.square = new Tiles[height][width];
+	    this.square = new TileTypes[height][width];
 	    for (int h = 0; h < height; h++) {
 		for (int w = 0; w < width; w++) {
 		    square[h][w] = getRndTile();
@@ -45,17 +45,17 @@ public class Board
 	return width;
     }
 
-    public Tiles getTile(int height, int width) {
+    public TileTypes getTile(int height, int width) {
 	return square[height][width];
     }
 
-    public Tiles getRndTile() {
-	Tiles myTile = myList.get(0);
+    public TileTypes getRndTile() {
+	TileTypes myTile = myList.get(0);
 	myList.remove(0);
 	return myTile;
     }
 
-    public boolean isSameTile(Tiles t1, Tiles t2) {
+    public boolean isSameTile(TileTypes t1, TileTypes t2) {
 	return t1.equals(t2);
     }
 
@@ -72,7 +72,7 @@ public class Board
 /**
     public boolean canBeSelected() {
 	boolean selectable = false;
-	Tiles tile = getRndTile();
+	TileTypes tile = getRndTile();
 	if (getNrOfTile == 2) {
 	    selectable = true;
 	}
@@ -88,8 +88,8 @@ public class Board
 int tileIndex = r.nextInt(tileList.size() - 2);
 
 
-Tiles t1 = tileList.get(tileIndex);
-	Tiles t2 = t1;
+TileTypes t1 = tileList.get(tileIndex);
+	TileTypes t2 = t1;
 	nrOfElem.add(t1);
 	nrOfElem.add(t2);
 Collections.shuffle(nrOfElem);
