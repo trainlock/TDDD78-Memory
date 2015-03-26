@@ -19,6 +19,24 @@ public class TileActionManager
 	this.gameBoard = gameBoard;
     }
 
+    public boolean isAllSameTile(){
+	int height = gameBoard.getHeight();
+	int width = gameBoard.getWidth();
+	int counter = 0;
+	for (int h = 0; h < height ; h++) {
+	    for (int w = 0; w < width; w++) {
+		if(isTurnedUp[h][w] == TileState.IS_SAME_TILE){
+		    counter++;
+		}
+	    }
+	}
+	if(counter == (height * width)) {
+	    //System.out.println("Congrats Champ!");
+	    return true;
+	}
+	return false;
+    }
+
     public void setXYValues(int x, int y) {
 	this.copiedX = x;
 	this.copiedY = y;
@@ -47,7 +65,6 @@ public class TileActionManager
 			memoryComp.fillTile(curY, curX);
 			clockTimer.stop();
 			setBoardEnabled(true);
-
 		}
 		else{
 		    clockTimer.stop();
@@ -148,6 +165,10 @@ public class TileActionManager
 		// Sätter valda tiles till null.
 		runTimer();
 		// Timer börjar sin nedräkning
+		if(isAllSameTile()){
+
+		}
+		// Kollar om alla är same.
 	    }
 	    else {
 		System.out.println("DON'T PRESS THE SAME TILE!");
