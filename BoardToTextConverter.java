@@ -1,8 +1,13 @@
 package se.liu.ida.linbe810.tddd78.memory;
 
-public class BoardToTextConverter
+/**
+ * Creates a gameBoard using letters.
+ * One sort of tile represents one letter.
+ */
+
+public final class BoardToTextConverter
 {
-    public static String convertToText(Board gameBoard) {
+    public String convertToText(Board gameBoard) {
 	int height = gameBoard.getHeight();
 	int width = gameBoard.getWidth();
 
@@ -19,7 +24,7 @@ public class BoardToTextConverter
 	return text;
     }
 
-    public static StringBuilder tileConverter(Tiles tileType, StringBuilder sb) {
+    public StringBuilder tileConverter(Tiles tileType, StringBuilder sb) {
 	switch (tileType) {
 	    case A:
 		sb.append("A");

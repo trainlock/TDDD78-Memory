@@ -9,16 +9,14 @@ public class Board
 {
     public Tiles[][] square;
     private int height, width;
-    private List<Tiles> tileList;
     private List<Tiles> temp;
     private List<Tiles> myList;
-    private boolean[][] isUp;
 
     public Board(int height, int width) {
 	this.height = height;
 	this.width = width;
 	if (checkBoardSize()) {
-	    this.tileList = new ArrayList<Tiles>(Arrays.asList(Tiles.values()));
+	    final List<Tiles> tileList = new ArrayList<Tiles>(Arrays.asList(Tiles.values()));
 	    tileList.remove(Tiles.BACKSIDE);
 	    tileList.remove(Tiles.OUTSIDE);
 	    temp = new ArrayList<Tiles>(tileList);

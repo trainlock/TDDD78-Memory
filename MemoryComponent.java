@@ -2,13 +2,13 @@ package se.liu.ida.linbe810.tddd78.memory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.AbstractMap;
 import java.util.EnumMap;
 
 public class MemoryComponent extends JComponent
 {
     private Board gameBoard;
-    private EnumMap<Tiles, Color> colourMap;
-    private Graphics g;
+    private AbstractMap<Tiles, Color> colourMap;
     public final static int SQUARE_SIZE = 100;
     public final static int SPACE = 10;
 
@@ -85,7 +85,6 @@ public class MemoryComponent extends JComponent
         Graphics g = this.getGraphics();
         Graphics2D g2d = (Graphics2D) g;
         Tiles currentTile = gameBoard.getTile(row, column);
-
         g2d.setColor(colourMap.get(currentTile));
         g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
     }
