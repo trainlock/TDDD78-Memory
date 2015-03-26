@@ -14,9 +14,11 @@ public class MemoryFrame extends JFrame implements MouseListener
     private MemoryComponent memoryComp;
     private Tiles t1, t2;
     private int x, y;
-    public int copiedX, copiedY;
+    private int copiedX, copiedY, curX, curY;
     private TileState[][] isTurnedUp;
-
+    private Timer clockTimer;
+    public boolean boardEnabled = true;
+    public static final int TIME = 2000;
 
 
     public MemoryFrame(final Board gameBoard) {
@@ -41,17 +43,55 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setVisible(true);
 
 
+
+	/*final Action doOneStep = new AbstractAction() {
+		    @Override public void actionPerformed(ActionEvent e) {
+			System.out.println("Tick tock");
+			// Generell timer som klockar hela tiden
+			// Kommer användas sedan för high-score
+		    }
+		};
+
+		final Timer timer = new Timer(500, doOneStep);
+		timer.setCoalesce(true);
+		timer.start();*/
+    }
+
+    public void setBoardEnabled(boolean boardEnabled) {
+	this.boardEnabled = boardEnabled;
+    }
+
+    public void runTimer(){
+	// Ta in final int? Be labbass att kolla på koden och se om vi gör någorlunda rätt
 	final Action doOneStep = new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
+		System.out.println("Tick tock toe");
 		//Tar bara ena
-		if (isTurnedUp[copiedY][copiedX] == TileState.IS_NOT_TURNED && isTurnedUp[y][x] == TileState.IS_NOT_TURNED) {
-		    isTurnedUp[copiedY][copiedX] = TileState.IS_TURNED;
+		if (isTurnedUp[copiedY][copiedX] == TileState.IS_DOWN && isTurnedUp[y][x] == TileState.IS_DOWN) {
+		    // whenDown();
+		    // ska ignorera allt man gör på spelplanen under ticken.
+		    System.out.println(boardEnabled + " run");
+		    isTurnedUp[copiedY][copiedX] = TileState.IS_UP;
+		    isTurnedUp[curY][curX] = TileState.IS_UP;
 		    memoryComp.fillTile(copiedY, copiedX);
+		    memoryComp.fillTile(curY, curX);
+		    clockTimer.stop();
+		    setBoardEnabled(true);
+		    System.out.println("STOP! I command you!");
+		}
+		/*
+		else if (gameBoard.isSameTile(t1, t2) && isTurnedUp[curY][curX] == TileState.IS_UP && isTurnedUp[copiedY][copiedX] == TileState.IS_UP) {
+		    setBoardEnabled(true);
+		}
+		*/
+		else{
+		    System.out.println("STOP! Break it down~~");
+		    clockTimer.stop();
 		}
 	    }
 	};
 
-	final Timer clockTimer = new Timer(1500, doOneStep);
+	clockTimer = new Timer(TIME, doOneStep);
 	clockTimer.setCoalesce(true);
 	clockTimer.start();
     }
@@ -60,8 +100,7 @@ public class MemoryFrame extends JFrame implements MouseListener
 	isTurnedUp = new TileState[height][width];
 	for (int h = 0; h < height; h++) {
 	    for (int w = 0; w < width; w++) {
-		isTurnedUp[h][w] = TileState.IS_TURNED;
-		//System.out.println(h+" "+w+" "+isTurnedUp[h][w]);
+		isTurnedUp[h][w] = TileState.IS_UP;
 	    }
 	}
     }
@@ -76,7 +115,7 @@ public class MemoryFrame extends JFrame implements MouseListener
 	JButton quitButton = new JButton("Quit");
 
 	newGameButton.setAction(new AbstractAction() {
-	    @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+	    @Override public void actionPerformed(ActionEvent e) {
 		Object[] options = {"Yes, wouldn't have it any other way", "No thanks, not my game today"};
 		int optionChosen = JOptionPane.showOptionDialog(frame.getParent(),
 								"Would you like to start a new game?",
@@ -91,7 +130,7 @@ public class MemoryFrame extends JFrame implements MouseListener
 	    }
 	});
 	quitButton.setAction(new AbstractAction() {
-	    @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+	    @Override public void actionPerformed(ActionEvent e) {
 		Object[] options = {"Yes, unfortunately", "No, I'm on a roll!"};
 		int optionChosen = JOptionPane.showOptionDialog(frame.getParent(),
 								"Are you really sure you want to do that?",
@@ -127,44 +166,41 @@ public class MemoryFrame extends JFrame implements MouseListener
     }
 
     public void turnTile(int curY, int curX) {
-	if (gameBoard.isSameTile(t1, t2) && isTurnedUp[curY][curX] == TileState.IS_TURNED && isTurnedUp[y][x] == TileState.IS_TURNED) {
+	if (gameBoard.isSameTile(t1, t2) && isTurnedUp[curY][curX] == TileState.IS_UP && isTurnedUp[y][x] == TileState.IS_UP) {
 	    fillSameTile(curY, curX);
 	    // Fyller två tiles som är av samma sort med ljuwgrå färg.
 	    isTurnedUp[curY][curX] = TileState.IS_SAME_TILE;
 	    isTurnedUp[y][x] = TileState.IS_SAME_TILE;
 	    // sätter så att tilen inte kan väljas igen.
-	    System.out.println("Kiwi");
+	    this.boardEnabled = true;
+	    System.out.println(boardEnabled + " same");
 	}
 	else {
-	    if (isTurnedUp[y][x] == TileState.IS_TURNED && isTurnedUp[curY][curX] == TileState.IS_TURNED) {
+	    if (isTurnedUp[y][x] == TileState.IS_UP && isTurnedUp[curY][curX] == TileState.IS_UP) {
 		// Om isTurnedUp == false, (nedvänd)
 		// för första och andra tiles -->
 		// fyller grått.
 		memoryComp.fillCurTile(y, x);
 		memoryComp.fillCurTile(curY, curX);
 		// Sätter att tilen är isTurnedUp == true, (uppvänd)
-		isTurnedUp[y][x] = TileState.IS_NOT_TURNED;
-		isTurnedUp[curY][curX] = TileState.IS_NOT_TURNED;
-		// Timern ska automatiskt sätta NOT_TURNED till TURNED
-		System.out.println("Apelsiner");
+		isTurnedUp[y][x] = TileState.IS_DOWN;
+		isTurnedUp[curY][curX] = TileState.IS_DOWN;
+		// Timern ska automatiskt sätta IS_DOWN till IS_UP
 	    }
 	    else if (isTurnedUp[curY][curX] == TileState.IS_SAME_TILE || isTurnedUp[y][x] == TileState.IS_SAME_TILE ||
-		     isTurnedUp[y][x] == TileState.IS_TURNED && isTurnedUp[curY][curX] == TileState.IS_NOT_TURNED ||
-		     isTurnedUp[curY][curX] == TileState.IS_TURNED && isTurnedUp[y][x] == TileState.IS_NOT_TURNED) {
+		     isTurnedUp[y][x] == TileState.IS_UP && isTurnedUp[curY][curX] == TileState.IS_DOWN ||
+		     isTurnedUp[curY][curX] == TileState.IS_UP && isTurnedUp[y][x] == TileState.IS_DOWN) {
 		// Borde tillhöra felhanteringen och Exceptions
 		// Spelplanen ska ej komma åt dessa brickor!
-		System.out.println("Mango");
 	    }
 	    else {
-		// Kommer aldrig in i else-satsen.
-		System.out.println("Bananer");
 		// Om de inte är isTurnedUp == true, (uppvänd)
 		// för första och andra tiles -->
 		// fyller med färg.
 		memoryComp.fillTile(y, x);
 		memoryComp.fillTile(curY, curX);
-		isTurnedUp[y][x] = TileState.IS_TURNED;
-		isTurnedUp[curY][curX] = TileState.IS_TURNED;
+		isTurnedUp[y][x] = TileState.IS_UP;
+		isTurnedUp[curY][curX] = TileState.IS_UP;
 	    }
 	}
     }
@@ -174,8 +210,9 @@ public class MemoryFrame extends JFrame implements MouseListener
 	// VIKTIGT BYT METODNAMN!!!!
 	int size = memoryComp.getSquareSize();
 	// size tar inte med SPACE! Därför blir det mysko med mellanrummen
-	int curX = xCoord/size;
-	int curY = yCoord/size;
+	this.curX = xCoord/size;
+	this.curY = yCoord/size;
+
 	if (t1 == null) {
 	    t1 = gameBoard.getTile(curY, curX);
 	    // Hämtar den första tilen som är tryckt.
@@ -188,17 +225,18 @@ public class MemoryFrame extends JFrame implements MouseListener
 		// Om det inte är samma tiles gör den detta.
 		t2 = gameBoard.getTile(curY, curX);
 		// Hämtar den andra tilen som är tryckt.
-		if(isTurnedUp[curY][curX] == TileState.IS_TURNED) {
-		    turnTile(curY, curX);
-		}
-		else if(isTurnedUp[curY][curX] == TileState.IS_NOT_TURNED){
+		if(isTurnedUp[curY][curX] == TileState.IS_UP || isTurnedUp[curY][curX] == TileState.IS_DOWN) {
 		    turnTile(curY, curX);
 		}
 		// Vänder två valda tiles.
 		resetTile();
+		setBoardEnabled(false);
 		// Sätter valda tiles till null.
+		runTimer();
+		// Timer börjar sin nedräkning
 	    }
 	    else {
+
 		System.out.println("DON'T PRESS THE SAME TILE!");
 		// ÄNDRA TEXTEN RETARD!!!
 		JOptionPane.showMessageDialog(this, "Do not press the same tile twice, retard!");
@@ -216,10 +254,14 @@ public class MemoryFrame extends JFrame implements MouseListener
     }
 
     @Override public void mousePressed(final MouseEvent e) {
-	int xCoord = e.getX();
-	int yCoord = e.getY();
-	// VIKTIGT BYT METODNAMN!!!!
-	yolo(xCoord, yCoord);
+	System.out.println(boardEnabled + " mouseEvent");
+	if (boardEnabled){
+	    // Ha en state på mouseEvent som säger om man kan änvända eller ej.
+	    int xCoord = e.getX();
+	    int yCoord = e.getY();
+	    // VIKTIGT BYT METODNAMN!!!!
+	    yolo(xCoord, yCoord);
+	}
     }
 
     @Override public void mouseReleased(final MouseEvent e) {
