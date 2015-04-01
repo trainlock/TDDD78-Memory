@@ -1,9 +1,45 @@
 package se.liu.ida.linbe810.tddd78.memory;
 
+import java.awt.Color;
+
 public class Tile
 {
-    int SIZE = 100;
+    private final static int SIZE = 100;
+    TileTypes type;
+    boolean isVisible;
+    Color frontsideColour;
+    Color backsideColour;
 
-    // Här ska alla brickornas egenskaper finnas
-    // T.e.x STATE, TYPE, COLOUR, IMGAES, SIZE
+    public Tile(TileTypes type, Color frontsideColour, Color backsideColour) {
+        this.type = type;
+        this.frontsideColour = frontsideColour;
+        this.backsideColour = backsideColour;
+    }
+
+    public TileTypes getTileType(){
+        return type;
+    }
+
+    public static int getTileSize() {
+        return SIZE;
+    }
+
+    public Color getFrontsideColour() {
+        return frontsideColour;
+    }
+
+    public Color getBacksideColour() {
+        return backsideColour;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null || other.getClass() != this.getClass()) return false;
+
+        Tile that = (Tile) other;
+
+        return this.type == that.type &&
+               this.frontsideColour.equals(that.frontsideColour) &&
+               this.backsideColour.equals(that.backsideColour);
+    }
 }

@@ -5,6 +5,16 @@ package se.liu.ida.linbe810.tddd78.memory;
  */
 public enum TileTypes
 {
-    A,B,C,D,E,F,G,H,BACKSIDE,OUTSIDE
-
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    /**
+     * BACKSIDE,
+     * OUTSIDE
+     */
 }

@@ -1,33 +1,35 @@
 package se.liu.ida.linbe810.tddd78.memory;
 
+import java.awt.Color;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class Board
 {
-    public TileTypes[][] square;
+    public Tile[][] tiles;
     private int height, width;
-    private List<TileTypes> temp;
-    private List<TileTypes> myList;
+    private List<Tile> listOfTiles;
+    private List<Color> listOfColours;
+    private List<TileTypes> listOfTypes;
 
     public Board(int height, int width) {
 	this.height = height;
 	this.width = width;
-	if (checkBoardSize()) {
-	    final List<TileTypes> tileList = new ArrayList<TileTypes>(Arrays.asList(TileTypes.values()));
-	    tileList.remove(TileTypes.BACKSIDE);
-	    tileList.remove(TileTypes.OUTSIDE);
-	    temp = new ArrayList<TileTypes>(tileList);
-	    myList = new ArrayList<TileTypes>(tileList);
-	    myList.addAll(temp);
-	    Collections.shuffle(myList);
 
-	    this.square = new TileTypes[height][width];
+	setListOfTypes();
+	setListOfColours();
+	createTiles();
+
+	if (checkBoardSize()) {
+
+	    Collections.shuffle(listOfTiles);
+
+	    this.tiles = new Tile[height][width];
 	    for (int h = 0; h < height; h++) {
 		for (int w = 0; w < width; w++) {
-		    square[h][w] = getRndTile();
+		    tiles[h][w] = getRndTile();
 	    	}
 	    }
 	}
@@ -45,17 +47,63 @@ public class Board
 	return width;
     }
 
-    public TileTypes getTile(int height, int width) {
-	return square[height][width];
+    public Tile getTile(int height, int width) {
+	return tiles[height][width];
     }
 
-    public TileTypes getRndTile() {
-	TileTypes myTile = myList.get(0);
-	myList.remove(0);
+    public int getListSize(List list){
+	return list.size();
+    }
+
+    public void createTiles() {
+	listOfTiles = new ArrayList<Tile>();
+	TileTypes type = getTileTypeFromList();
+	Color colour = getColourFromList();
+	for (Tile tile : listOfTiles) {
+	    tile = new Tile(type, colour, Color.GRAY);
+	    listOfTiles.add(tile);
+	    listOfTiles.add(tile);
+	}
+    }
+
+    public void setListOfTypes() {
+	listOfTypes = new ArrayList<TileTypes>();
+	for (TileTypes tileType : TileTypes.values()) {
+	    listOfTypes.add(tileType);
+	}
+    }
+    public TileTypes getTileTypeFromList() {
+	int size = getListSize(listOfTypes);
+	TileTypes type = null;
+	for (int i = 0; i < size; i++) {
+	    type = listOfTypes.get(i);
+	}
+	return type;
+    }
+
+    public void setListOfColours() {
+	listOfColours = new ArrayList<Color>();
+	for (TileColours tileColour : TileColours.values()) {
+	    listOfColours.add(tileColour.getColour());
+	}
+    }
+
+    public Color getColourFromList() {
+	int size = getListSize(listOfColours);
+	Color colour = null;
+	for (int i = 0; i < size; i++) {
+	    colour = listOfColours.get(i);
+	}
+	return colour;
+    }
+
+    public Tile getRndTile() {
+	Tile myTile = listOfTiles.get(0);
+	listOfTiles.remove(0);
 	return myTile;
     }
 
-    public boolean isSameTile(TileTypes t1, TileTypes t2) {
+    public boolean isSameTile(Tile t1, Tile t2) {
 	return t1.equals(t2);
     }
 
@@ -68,6 +116,17 @@ public class Board
 }
 
 
+    //private List<TileTypes> temp;
+    //private List<TileTypes> myList;
+
+/**
+ * final List<TileTypes> tileList = new ArrayList<TileTypes>(Arrays.asList(TileTypes.values()));
+tileList.remove(TileTypes.BACKSIDE);
+tileList.remove(TileTypes.OUTSIDE);
+temp = new ArrayList<TileTypes>(tileList);
+myList = new ArrayList<TileTypes>(tileList);
+myList.addAll(temp);
+ */
 
 /**
     public boolean canBeSelected() {
