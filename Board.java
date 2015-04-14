@@ -51,19 +51,30 @@ public class Board
 	return tiles[height][width];
     }
 
+    // Gör om till en generics
     public int getListSize(List list){
 	return list.size();
+    }
+
+
+    public Color getColourFromList() {
+	int size = getListSize(listOfColours);
+	Color colour = listOfColours.get(0);
+	System.out.println("One Colour: " + colour);
+	listOfColours.remove(0);
+	return colour;
     }
 
     public void createTiles() {
 	listOfTiles = new ArrayList<Tile>();
 	TileTypes type = getTileTypeFromList();
-	Color colour = getColourFromList();
-	for (Tile tile : listOfTiles) {
-	    tile = new Tile(type, colour, Color.GRAY);
-	    listOfTiles.add(tile);
-	    listOfTiles.add(tile);
+	for (Color colour : listOfColours) {
+	    Tile tile1 = new Tile(type, colour, Color.GRAY);
+	    Tile tile2 = new Tile(type, colour, Color.GRAY);
+	    listOfTiles.add(tile1);
+	    listOfTiles.add(tile2);
 	}
+	System.out.println("List: " + listOfTiles);
     }
 
     public void setListOfTypes() {
@@ -88,18 +99,14 @@ public class Board
 	}
     }
 
-    public Color getColourFromList() {
-	int size = getListSize(listOfColours);
-	Color colour = null;
-	for (int i = 0; i < size; i++) {
-	    colour = listOfColours.get(i);
-	}
-	return colour;
-    }
-
     public Tile getRndTile() {
-	Tile myTile = listOfTiles.get(0);
-	listOfTiles.remove(0);
+	System.out.println("Random list thingy " + listOfTiles);
+	Tile myTile = null;
+	if (listOfTiles.size() != 0) {
+	    myTile = listOfTiles.get(0);
+	    listOfTiles.remove(0);
+	}
+	System.out.println("myTile: " + myTile);
 	return myTile;
     }
 
