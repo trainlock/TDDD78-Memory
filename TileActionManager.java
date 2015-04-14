@@ -10,7 +10,7 @@ public class TileActionManager
     private Timer clockTimer;
     public TileState[][] isTurnedUp;
     private int x, y, copiedX, copiedY, curX, curY;
-    private TileTypes t1, t2;
+    private Tile t1, t2;
     public boolean boardEnabled = true;
     public static final int TIME = 2000;
 
@@ -139,7 +139,7 @@ public class TileActionManager
         // VIKTIGT BYT METODNAMN!!!!
     public void yolo(int xCoord, int yCoord) {
 	// VIKTIGT BYT METODNAMN!!!!
-	int size = memoryComp.getSquareSize();
+	int size = Tile.getTileSize();
 	// size tar inte med SPACE! Därför blir det mysko med mellanrummen
 	this.curX = xCoord / size;
 	this.curY = yCoord / size;

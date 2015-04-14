@@ -13,13 +13,13 @@ public enum TileColours
     PINK(Color.PINK),
     MAGENTA(Color.MAGENTA);
 
-    private Color color;
+    private Color colour;
 
-     TileColours(final Color color) {
-	 this.color = color;
+     TileColours(final Color colour) {
+	 this.colour = colour;
      }
 
     public Color getColour() {
-	return color;
+        return colour;
     }
 }

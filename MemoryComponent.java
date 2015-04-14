@@ -23,7 +23,7 @@ public class MemoryComponent extends JComponent
     @Override
     public void paintComponent(Graphics g) {
 	super.paintComponent(g);
-	fillBoardColour(gameBoard, g);
+        fillBoardColour(gameBoard, g);
     }
 
     public void fillBoardColour(Board gameBoard, Graphics g) {
@@ -41,13 +41,10 @@ public class MemoryComponent extends JComponent
                 Tile curTile = gameBoard.getTile(row, column);
 
                 g2d.setColor(curTile.getFrontsideColour());
-                g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
+                g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE,
+                             SQUARE_SIZE);
             }
         }
-    }
-
-    public int getSquareSize() {
-        return SQUARE_SIZE;
     }
 
     public void fillBacksideOfTile(int row, int column) {
@@ -77,35 +74,6 @@ public class MemoryComponent extends JComponent
         g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
     }
 }
-
-/**
- *  import java.util.AbstractMap;
-    import java.util.EnumMap;
- *
- *     private AbstractMap<TileTypes, Color> colourMap;
- *
- * 	this.colourMap = new EnumMap<TileTypes, Color>(TileTypes.class);
- 	fillMapColour();
- *
- *     public void fillMapColour() {
- 	// A, B, C, D, E, F, G, H, BACKSIDE, OUTSIDE
-
- 	colourMap.put(TileTypes.A, Color.GREEN);
- 	colourMap.put(TileTypes.B, Color.BLUE);
- 	colourMap.put(TileTypes.C, Color.RED);
- 	colourMap.put(TileTypes.D, Color.ORANGE);
- 	colourMap.put(TileTypes.E, Color.YELLOW);
- 	colourMap.put(TileTypes.F, Color.CYAN);
- 	colourMap.put(TileTypes.G, Color.PINK);
- 	colourMap.put(TileTypes.H, Color.MAGENTA);
- 	colourMap.put(TileTypes.BACKSIDE, Color.LIGHT_GRAY);
- 	colourMap.put(TileTypes.OUTSIDE, Color.BLACK);
-     }
- */
-
-// Om vi vill skapa typ border runt brickorna.
-// g2d.drawRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
-
 
 
 

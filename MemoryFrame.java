@@ -13,6 +13,7 @@ public class MemoryFrame extends JFrame implements MouseListener
     private MemoryComponent memoryComp;
     private TileActionManager tileManager;
     public boolean boardEnabled;
+    public boolean isPlaying = true;
 
     public MemoryFrame(final Board gameBoard) {
 	super("MyMemories");
@@ -34,6 +35,13 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setResizable(false);
 	frame.pack();
 	frame.setVisible(true);
+
+	while(isPlaying) {
+	    if (tileManager.isAllSameTile()) {
+	   	    JOptionPane.showMessageDialog(this, "You have beaten the game! Congrats CHAMP!");
+		isPlaying = false;
+	   	}
+	}
     }
 
     private void createMenus() {
@@ -81,11 +89,6 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setJMenuBar(menuBar);
     }
 
-    public void showWinMessage() {
-	if (tileManager.isAllSameTile()) {
-	    JOptionPane.showMessageDialog(this, "You have beaten the game! Congrats CHAMP!");
-	}
-    }
 
     @Override public void mouseClicked(final MouseEvent e) {
 
@@ -118,35 +121,3 @@ public class MemoryFrame extends JFrame implements MouseListener
     }
 
 }
-
-	//private JTextArea textArea;
-	//this.textArea = new JTextArea(height, width);
-	//Font font = new Font("monospace", Font.BOLD, 30);
-	//textArea.setFont(font);
-	//textArea.setText(BoardToTextConverter.convertToText(gameBoard));
-
-
-/**
-JLabel yellowLabel = new JLabel();
-yellowLabel.setOpaque(true);
-yellowLabel.setBackground(new Color(248, 213, 131));
-	yellowLabel.setPreferredSize(getPreferredSize());
-
-
-
- private ArrayList<TileButton> myButtons;
-
- memoryPanel.setSize(getPreferredSize());
-	memoryPanel.setLayout(new GridLayout(4, 4));
-
-	for (int h = 0; h < height; h++) {
-		    for (int w = 0; w < width; w++) {
-			TileButton button = new TileButton();
-			button.setBackground(memoryComp.fillButton(gameBoard, h, w));
-			button.setOpaque(true);
-		 	memoryPanel.add(button);
-			addButton(button);
-		    }
-		}
-
- */

@@ -6,9 +6,9 @@ public class Tile
 {
     private final static int SIZE = 100;
     TileTypes type;
-    boolean isVisible;
     Color frontsideColour;
     Color backsideColour;
+    boolean isVisible;
 
     public Tile(TileTypes type, Color frontsideColour, Color backsideColour) {
         this.type = type;
@@ -16,12 +16,12 @@ public class Tile
         this.backsideColour = backsideColour;
     }
 
-    public TileTypes getTileType(){
-        return type;
-    }
-
     public static int getTileSize() {
         return SIZE;
+    }
+
+    public TileTypes getTileType(){
+        return type;
     }
 
     public Color getFrontsideColour() {

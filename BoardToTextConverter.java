@@ -5,6 +5,7 @@ package se.liu.ida.linbe810.tddd78.memory;
  * One sort of tile represents one letter.
  */
 
+/**
 public final class BoardToTextConverter
 {
     public String convertToText(Board gameBoard) {
@@ -63,3 +64,4 @@ public final class BoardToTextConverter
 	return sb;
     }
 }
+ */
