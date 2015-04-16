@@ -3,16 +3,17 @@ package se.liu.ida.linbe810.tddd78.memory;
 import java.awt.Color;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class Board
 {
-    public Tile[][] tiles;
+    private Tile[][] tiles = null;
     private int height, width;
-    private List<Tile> listOfTiles;
-    private List<Color> listOfColours;
-    private List<TileTypes> listOfTypes;
+    private List<Tile> listOfTiles = null;
+    private List<Color> listOfColours = null;
+    private List<TileTypes> listOfTypes = null;
 
     public Board(int height, int width) {
 	this.height = height;
@@ -52,7 +53,7 @@ public class Board
     }
 
     // Gör om till en generics
-    public int getListSize(List list){
+    public int getListSize(Collection list){
 	return list.size();
     }
 
@@ -69,9 +70,7 @@ public class Board
 
     public void setListOfTypes() {
 	listOfTypes = new ArrayList<TileTypes>();
-	for (TileTypes tileType : TileTypes.values()) {
-	    listOfTypes.add(tileType);
-	}
+	Collections.addAll(listOfTypes, TileTypes.values());
     }
     public TileTypes getTileTypeFromList() {
 	int size = getListSize(listOfTypes);
@@ -109,13 +108,3 @@ public class Board
 	return false;
     }
 }
-
-/**
-    public Color getColourFromList() {
-	int size = getListSize(listOfColours);
-	Color colour = listOfColours.get(0);
-	System.out.println("One Colour: " + colour);
-	listOfColours.remove(0);
-	return colour;
-    }
- */

@@ -2,6 +2,10 @@ package se.liu.ida.linbe810.tddd78.memory;
 
 import java.awt.Color;
 
+/**
+ * Contains the Colours that the tiles can have.
+ */
+
 public enum TileColours
 {
     GREEN(Color.GREEN),
@@ -13,7 +17,7 @@ public enum TileColours
     PINK(Color.PINK),
     MAGENTA(Color.MAGENTA);
 
-    private Color colour;
+    private final Color colour;
 
      TileColours(final Color colour) {
 	 this.colour = colour;

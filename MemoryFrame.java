@@ -10,21 +10,17 @@ import java.awt.event.ActionEvent;
 public class MemoryFrame extends JFrame implements MouseListener
 {
     private JFrame frame;
-    private MemoryComponent memoryComp;
     private TileActionManager tileManager;
+    private Counter clock;
     public boolean boardEnabled;
-    public boolean isPlaying = true;
-    public boolean isAllSame;
+    private boolean isPlaying = true;
+    private boolean isAllSame;
 
-    public MemoryFrame(final Board gameBoard) {
+    public MemoryFrame(Board gameBoard) {
 	super("MyMemories");
 	// Kommer behöva var mycket större än det är nu!
 
-	//int height = gameBoard.getHeight();
-	//int width = gameBoard.getWidth();
-	//tileManager.setStartTileValue(height, width);
-
-	memoryComp = new MemoryComponent(gameBoard);
+	final MemoryComponent memoryComp = new MemoryComponent(gameBoard);
 	tileManager = new TileActionManager(memoryComp, gameBoard);
 
 	this.frame = new JFrame("Memory");
@@ -40,7 +36,8 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setVisible(true);
 
 	while(isPlaying) {
-	    //isAllSameTile fungerar inte!!!!!!
+	    Counter clock = new Counter();
+
 	    isAllSame = tileManager.isAllSameTile();
 	    if (isAllSame) {
 	   	    JOptionPane.showMessageDialog(this, "You have beaten the game! Congrats CHAMP!");
@@ -65,13 +62,14 @@ public class MemoryFrame extends JFrame implements MouseListener
 								null,
 								options,
 								options[1]);
-		if (optionChosen == JOptionPane.YES_OPTION);
-		System.exit(0);
+		if (optionChosen == JOptionPane.NO_OPTION) {
+		    System.exit(0);
+		}
 	    }
 	});
 	quitButton.setAction(new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
-		Object[] options = {"Yes, unfortunately", "No, I'm on a roll!"};
+		Object[] options = {"No, I'm on a roll!", "Yes, unfortunately"};
 		int optionChosen = JOptionPane.showOptionDialog(frame.getParent(),
 								"Are you really sure you want to do that?",
 								"No!! You can't do this! Why?!",
@@ -80,8 +78,12 @@ public class MemoryFrame extends JFrame implements MouseListener
 								null,
 								options,
 								options[1]);
-		if (optionChosen == JOptionPane.YES_OPTION);
-		System.exit(0);
+		if (optionChosen == JOptionPane.NO_OPTION) {
+		    System.exit(0);
+		}
+		else {
+		    JOptionPane.showMessageDialog(frame.getParent(), "That's my boy!!");
+		}
 	    }
 	});
 
@@ -102,11 +104,11 @@ public class MemoryFrame extends JFrame implements MouseListener
     @Override public void mousePressed(final MouseEvent e) {
 	this.boardEnabled = tileManager.isBoardEnabled();
 	if (boardEnabled){
-	    // Ha en state på mouseEvent som säger om man kan änvända eller ej.
+	    // Har en state på mouseEvent som säger om man kan änvända eller ej.
 	    int xCoord = e.getX();
 	    int yCoord = e.getY();
 	    // VIKTIGT BYT METODNAMN!!!!
-	    tileManager.yolo(xCoord, yCoord);
+	    tileManager.click(xCoord, yCoord);
 	}
     }
 
@@ -121,5 +123,8 @@ public class MemoryFrame extends JFrame implements MouseListener
     @Override public void mouseExited(final MouseEvent e) {
 
     }
-
 }
+
+	//int height = gameBoard.getHeight();
+	//int width = gameBoard.getWidth();
+	//tileManager.setStartTileValue(height, width);

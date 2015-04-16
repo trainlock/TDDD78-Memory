@@ -5,11 +5,10 @@ import java.awt.Color;
 public class Tile
 {
     private final static int SIZE = 100;
-    TileTypes type;
-    TileState state;
-    Color frontsideColour;
-    Color backsideColour;
-    boolean isVisible;
+    private TileTypes type;
+    private TileState state;
+    private Color frontsideColour;
+    private Color backsideColour;
 
     public Tile(TileTypes type, Color frontsideColour, Color backsideColour, TileState state) {
         this.type = type;

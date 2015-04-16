@@ -71,24 +71,5 @@ public class MemoryComponent extends JComponent
                      SQUARE_SIZE);
     }
 }
-/**
-    public void fillBacksideOfTile(int row, int column) {
-        Graphics g = this.getGraphics();
-        Graphics2D g2d = (Graphics2D) g;
-
-        Tile currentTile = gameBoard.getTile(row, column);
-
-        g2d.setColor(currentTile.getBacksideColour());
-        g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
-    }
-
-    public void fillCurTile(int row, int column) {
-        Graphics g = this.getGraphics();
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.GRAY);
-        g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
-    }
- */
-
 
 
