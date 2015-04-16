@@ -12,7 +12,7 @@ public class TileActionManager
     private int t2X, t2Y, copiedX, copiedY, t1X, t1Y;
     private Tile t1, t2;
     public boolean boardEnabled = true;
-    public static final int TIME = 2000;
+    public static final int TIME = 100;
 
     public TileActionManager(MemoryComponent memoryComp, Board gameBoard) {
 	this.memoryComp = memoryComp;
@@ -34,21 +34,22 @@ public class TileActionManager
 
     public boolean isAllSameTile() {
 	int counter = 0;
-	int height = gameBoard.getHeight() - 1;
+	int height = gameBoard.getHeight();
  	// height == row == t2Y
-	int width = gameBoard.getWidth() - 1;
+	int width = gameBoard.getWidth();
  	// width == column == t2X
-
-	Tile currentTile = gameBoard.getTile(height, width);
 
 	for (int h = 0; h < height; h++) {
 	    for (int w = 0; w < width; w++) {
+
+		Tile currentTile = gameBoard.getTile(h , w);
+
 		if (currentTile.getState() == TileState.IS_SAME_TILE) {
 		    counter++;
 		}
 	    }
 	}
-	if (counter == (height * width)) {
+	if (counter == (height * width )) {
 	    return true;
 	}
 	return false;
@@ -81,6 +82,7 @@ public class TileActionManager
 		    setBoardEnabled(true);
 		    setBoardEnabled(true);
 		    System.out.println(boardEnabled + " after runTimer");
+		    isAllSameTile();
 		}
 	    }
 	};

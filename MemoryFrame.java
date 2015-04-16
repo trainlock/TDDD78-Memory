@@ -14,6 +14,7 @@ public class MemoryFrame extends JFrame implements MouseListener
     private TileActionManager tileManager;
     public boolean boardEnabled;
     public boolean isPlaying = true;
+    public boolean isAllSame;
 
     public MemoryFrame(final Board gameBoard) {
 	super("MyMemories");
@@ -39,12 +40,14 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setVisible(true);
 
 	while(isPlaying) {
-	    if (tileManager.isAllSameTile()) {
+	    //isAllSameTile fungerar inte!!!!!!
+	    isAllSame = tileManager.isAllSameTile();
+	    if (isAllSame) {
 	   	    JOptionPane.showMessageDialog(this, "You have beaten the game! Congrats CHAMP!");
 		isPlaying = false;
 	   	}
 
-	}
+	 }
     }
 
     private void createMenus() {
