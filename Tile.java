@@ -6,14 +6,16 @@ public class Tile
 {
     private final static int SIZE = 100;
     TileTypes type;
+    TileState state;
     Color frontsideColour;
     Color backsideColour;
     boolean isVisible;
 
-    public Tile(TileTypes type, Color frontsideColour, Color backsideColour) {
+    public Tile(TileTypes type, Color frontsideColour, Color backsideColour, TileState state) {
         this.type = type;
         this.frontsideColour = frontsideColour;
         this.backsideColour = backsideColour;
+        this.state = state;
     }
 
     public static int getTileSize() {
@@ -22,6 +24,14 @@ public class Tile
 
     public TileTypes getTileType(){
         return type;
+    }
+
+    public TileState getState() {
+        return state;
+    }
+
+    public void setState(TileState state) {
+        this.state = state;
     }
 
     public Color getFrontsideColour() {

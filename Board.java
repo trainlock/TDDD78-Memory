@@ -56,25 +56,15 @@ public class Board
 	return list.size();
     }
 
-
-    public Color getColourFromList() {
-	int size = getListSize(listOfColours);
-	Color colour = listOfColours.get(0);
-	System.out.println("One Colour: " + colour);
-	listOfColours.remove(0);
-	return colour;
-    }
-
     public void createTiles() {
 	listOfTiles = new ArrayList<Tile>();
 	TileTypes type = getTileTypeFromList();
 	for (Color colour : listOfColours) {
-	    Tile tile1 = new Tile(type, colour, Color.GRAY);
-	    Tile tile2 = new Tile(type, colour, Color.GRAY);
+	    Tile tile1 = new Tile(type, colour, Color.GRAY, TileState.IS_UP);
+	    Tile tile2 = new Tile(type, colour, Color.GRAY, TileState.IS_UP);
 	    listOfTiles.add(tile1);
 	    listOfTiles.add(tile2);
 	}
-	System.out.println("List: " + listOfTiles);
     }
 
     public void setListOfTypes() {
@@ -100,13 +90,11 @@ public class Board
     }
 
     public Tile getRndTile() {
-	System.out.println("Random list thingy " + listOfTiles);
 	Tile myTile = null;
-	if (listOfTiles.size() != 0) {
+	if (!listOfTiles.isEmpty()) {
 	    myTile = listOfTiles.get(0);
 	    listOfTiles.remove(0);
 	}
-	System.out.println("myTile: " + myTile);
 	return myTile;
     }
 
@@ -121,3 +109,13 @@ public class Board
 	return false;
     }
 }
+
+/**
+    public Color getColourFromList() {
+	int size = getListSize(listOfColours);
+	Color colour = listOfColours.get(0);
+	System.out.println("One Colour: " + colour);
+	listOfColours.remove(0);
+	return colour;
+    }
+ */

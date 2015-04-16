@@ -18,12 +18,14 @@ public class MemoryFrame extends JFrame implements MouseListener
     public MemoryFrame(final Board gameBoard) {
 	super("MyMemories");
 	// Kommer behöva var mycket större än det är nu!
-	int height = gameBoard.getHeight();
-	int width = gameBoard.getWidth();
+
+	//int height = gameBoard.getHeight();
+	//int width = gameBoard.getWidth();
+	//tileManager.setStartTileValue(height, width);
 
 	memoryComp = new MemoryComponent(gameBoard);
 	tileManager = new TileActionManager(memoryComp, gameBoard);
-	tileManager.setStartTileValue(height, width);
+
 	this.frame = new JFrame("Memory");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -41,6 +43,7 @@ public class MemoryFrame extends JFrame implements MouseListener
 	   	    JOptionPane.showMessageDialog(this, "You have beaten the game! Congrats CHAMP!");
 		isPlaying = false;
 	   	}
+
 	}
     }
 
@@ -89,22 +92,18 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setJMenuBar(menuBar);
     }
 
-
     @Override public void mouseClicked(final MouseEvent e) {
 
     }
 
     @Override public void mousePressed(final MouseEvent e) {
 	this.boardEnabled = tileManager.isBoardEnabled();
-	System.out.println(boardEnabled + " mouseEvent");
 	if (boardEnabled){
 	    // Ha en state på mouseEvent som säger om man kan änvända eller ej.
 	    int xCoord = e.getX();
 	    int yCoord = e.getY();
 	    // VIKTIGT BYT METODNAMN!!!!
-	    System.out.println("före");
 	    tileManager.yolo(xCoord, yCoord);
-	    System.out.println("efter");
 	}
     }
 

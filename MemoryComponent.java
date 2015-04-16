@@ -34,19 +34,44 @@ public class MemoryComponent extends JComponent
        	int width = gameBoard.getWidth();
         // width == column == x
 
-        System.out.println("ppppp");
         for (int row = 0; row < height; row++) {
             for (int column = 0; column < width; column++) {
 
                 Tile curTile = gameBoard.getTile(row, column);
+                TileState state = curTile.getState();
 
-                g2d.setColor(curTile.getFrontsideColour());
+                if (state == TileState.IS_UP) {
+                    g2d.setColor(curTile.getFrontsideColour());
+                }
+                else if (state == TileState.IS_DOWN || state == TileState.IS_SAME_TILE) {
+                    g2d.setColor(curTile.getBacksideColour());
+                }
+
                 g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE,
                              SQUARE_SIZE);
             }
         }
     }
 
+    public void fillTile(TileState state, int row, int column) {
+        Graphics g = this.getGraphics();
+        Graphics2D g2d = (Graphics2D) g;
+
+        Tile currentTile = gameBoard.getTile(row, column);
+
+        if (state == TileState.IS_UP) {
+            g2d.setColor(currentTile.getFrontsideColour());
+        }
+        else if (state == TileState.IS_DOWN ||
+                 state == TileState.IS_SAME_TILE) {
+            g2d.setColor(currentTile.getBacksideColour());
+        }
+
+        g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE,
+                     SQUARE_SIZE);
+    }
+}
+/**
     public void fillBacksideOfTile(int row, int column) {
         Graphics g = this.getGraphics();
         Graphics2D g2d = (Graphics2D) g;
@@ -57,23 +82,13 @@ public class MemoryComponent extends JComponent
         g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
     }
 
-    public void fillTile(int row, int column) {
-        Graphics g = this.getGraphics();
-        Graphics2D g2d = (Graphics2D) g;
-
-        Tile currentTile = gameBoard.getTile(row, column);
-
-        g2d.setColor(currentTile.getFrontsideColour());
-        g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
-    }
-
     public void fillCurTile(int row, int column) {
         Graphics g = this.getGraphics();
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.GRAY);
         g2d.fillRect(column * SQUARE_SIZE + column * SPACE, row * SQUARE_SIZE + row * SPACE, SQUARE_SIZE, SQUARE_SIZE);
     }
-}
+ */
 
 
 
