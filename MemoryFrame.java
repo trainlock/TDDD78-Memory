@@ -11,39 +11,66 @@ public class MemoryFrame extends JFrame implements MouseListener
 {
     private JFrame frame;
     private TileActionManager tileManager;
-    private Counter clock;
+    private Counter clock = new Counter();
+    private BoardPanel myBoard;
+    public Board gameBoard;
     public boolean boardEnabled;
-    private boolean isPlaying = true;
+    private boolean isPlaying;
     private boolean isAllSame;
+    private int PANEL_HEIGHT;
+    private int counter = 0;
+    final MemoryComponent memoryComp;
+
 
     public MemoryFrame(Board gameBoard) {
 	super("MyMemories");
-	// Kommer behöva var mycket större än det är nu!
+	this.gameBoard = gameBoard;
+	this.isPlaying = true;
 
-	final MemoryComponent memoryComp = new MemoryComponent(gameBoard);
+	// Kommer behöva var mycket större än det är nu!
+	memoryComp = new MemoryComponent(gameBoard);
 	tileManager = new TileActionManager(memoryComp, gameBoard);
+
+	this.myBoard = new BoardPanel(gameBoard, memoryComp);
 
 	this.frame = new JFrame("Memory");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	createMenus();
 
-	frame.setLayout(new BorderLayout());
-	frame.getContentPane().add(memoryComp, BorderLayout.CENTER);
+	BorderLayout b = new BorderLayout();
+	frame.setLayout(b);
+
+	frame.add(clock, BorderLayout.NORTH);
+	frame.getContentPane().add(myBoard, BorderLayout.SOUTH);
 	frame.getContentPane().addMouseListener(this);
+
 	frame.setResizable(false);
 	frame.pack();
 	frame.setVisible(true);
 
+	run();
+    }
+
+    /**
+    void restartGame() {
+	remove(myBoard);
+	BoardPanel newBoard = new BoardPanel(new Board(gameBoard.getHeight(), gameBoard.getWidth()), memoryComp);
+	frame.add(newBoard);
+	revalidate();
+    }
+     */
+
+    private void run() {
 	while(isPlaying) {
-	    Counter clock = new Counter();
 
 	    isAllSame = tileManager.isAllSameTile();
+
 	    if (isAllSame) {
+		clock.stopTimer();
 	   	    JOptionPane.showMessageDialog(this, "You have beaten the game! Congrats CHAMP!");
 		isPlaying = false;
 	   	}
-
 	 }
     }
 
@@ -53,32 +80,36 @@ public class MemoryFrame extends JFrame implements MouseListener
 
 	newGameButton.setAction(new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
-		Object[] options = {"Yes, wouldn't have it any other way", "No thanks, not my game today"};
+		Object[] options = {"Yes", "No"};
 		int optionChosen = JOptionPane.showOptionDialog(frame.getParent(),
 								"Would you like to start a new game?",
-								"Are you sure?",
+								"New game",
 								JOptionPane.YES_NO_OPTION,
 								JOptionPane.QUESTION_MESSAGE,
 								null,
 								options,
 								options[1]);
-		if (optionChosen == JOptionPane.NO_OPTION) {
-		    System.exit(0);
+		if (optionChosen == JOptionPane.YES_OPTION) {
+		    /**
+		    gameBoard.restart();
+		    tileManager.resetTiles(gameBoard);
+		    memoryComp.repaint();
+		     */
 		}
 	    }
 	});
 	quitButton.setAction(new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
-		Object[] options = {"No, I'm on a roll!", "Yes, unfortunately"};
+		Object[] options = {"Yes", "No"};
 		int optionChosen = JOptionPane.showOptionDialog(frame.getParent(),
-								"Are you really sure you want to do that?",
-								"No!! You can't do this! Why?!",
+								"Would you like to quit the game?",
+								"Quit",
 								JOptionPane.YES_NO_OPTION,
 								JOptionPane.QUESTION_MESSAGE,
 								null,
 								options,
 								options[1]);
-		if (optionChosen == JOptionPane.NO_OPTION) {
+		if (optionChosen == JOptionPane.YES_OPTION) {
 		    System.exit(0);
 		}
 		else {
@@ -103,12 +134,19 @@ public class MemoryFrame extends JFrame implements MouseListener
 
     @Override public void mousePressed(final MouseEvent e) {
 	this.boardEnabled = tileManager.isBoardEnabled();
+	this.PANEL_HEIGHT = clock.getHeight();
 	if (boardEnabled){
-	    // Har en state på mouseEvent som säger om man kan änvända eller ej.
+	    // Har en state på mouseEvent som säger om man kan använda eller ej.
 	    int xCoord = e.getX();
 	    int yCoord = e.getY();
-	    // VIKTIGT BYT METODNAMN!!!!
-	    tileManager.click(xCoord, yCoord);
+	    // FIXA SÅ ATT DEN INTE KÄNNER AV MUSKLICKNINGAR NÄR DEN ÄR PÅ PANEL
+	    if (yCoord - PANEL_HEIGHT >= 0) {
+		tileManager.click(xCoord, (yCoord - PANEL_HEIGHT));
+		isPlaying = true;
+		if(isPlaying && counter == 0){
+		    counter++;
+		}
+	    }
 	}
     }
 
@@ -124,7 +162,3 @@ public class MemoryFrame extends JFrame implements MouseListener
 
     }
 }
-
-	//int height = gameBoard.getHeight();
-	//int width = gameBoard.getWidth();
-	//tileManager.setStartTileValue(height, width);

@@ -1,37 +1,50 @@
 package se.liu.ida.linbe810.tddd78.memory;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.awt.Dimension;
 import javax.swing.*;
 
-public class Counter
+public class Counter extends JPanel
 {
-    private final ClockListener clockListener = new ClockListener();
-    private final Timer timer = new Timer(1000, clockListener);
-    private static final int ONE_MIN_IN_SEC = 60;
-    private static final int RESET = 00;
+    private Timer timer;
+    public JTextField textField;
+    private static final int TIMER_SIZE = 100;
+    private int seconds = 0;
+    private int minutes = 0;
 
-private class ClockListener implements ActionListener {
 
-    private int minutes;
-    private int seconds;
-    private String minute = null;
-    private String second = null;
+    public Counter() {
+        this.textField = new JTextField("00:00");
+        textField.setSize(new Dimension(TIMER_SIZE, TIMER_SIZE));
+       	textField.setHorizontalAlignment(JTextField.CENTER);
+        textField.setEditable(false);
 
-    @Override
-    public void actionPerformed(final ActionEvent e) {
-        NumberFormat format = new DecimalFormat("00");
-        if (seconds == ONE_MIN_IN_SEC) {
-            seconds = RESET;
-            minutes++;
-        }
-        minute = format.format(minutes);
-        second = format.format(seconds);
-        System.out.println(minute + ":" + second);
-        seconds++;
+        runTimer();
+        timer.setInitialDelay(0);
+
+        this.add(textField);
     }
-}
 
+    public void runTimer(){
+	final Action doOneStep = new AbstractAction() {
+	    @Override public void actionPerformed(ActionEvent e) {
+
+                if(seconds == 60){
+                    minutes ++;
+                    seconds = 0;
+                }
+                seconds++;
+                String time = String.format("%02d:%02d",minutes,seconds);
+                textField.setText(time);
+	    }
+	};
+
+	this.timer = new Timer(1000, doOneStep);
+	timer.setCoalesce(true);
+	timer.start();
+    }
+
+    public void stopTimer() {
+        timer.stop();
+    }
 }

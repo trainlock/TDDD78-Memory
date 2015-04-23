@@ -107,4 +107,15 @@ public class Board
 	}
 	return false;
     }
+
+    public void restart(){
+	Collections.shuffle(listOfTiles);
+	this.tiles = new Tile[height][width];
+ 	for (int h = 0; h < height; h++) {
+	    for (int w = 0; w < width; w++) {
+  		tiles[h][w] = getRndTile();
+	    }
+ 	}
+    }
+
 }

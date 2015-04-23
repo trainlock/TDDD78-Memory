@@ -50,7 +50,6 @@ public class TileActionManager
     }
 
     public void runTimer(){
-	// Ta in final int? Be labbass att kolla på koden och se om vi gör någorlunda rätt
 	final Action doOneStep = new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
 
@@ -76,6 +75,16 @@ public class TileActionManager
     public void resetTile(){
 	t1 = null;
 	t2 = null;
+    }
+
+    public void resetTiles(Board myBoard) {
+	for (int h = 0; h < myBoard.getHeight(); h++) {
+	    for (int w = 0; w < myBoard.getWidth(); w++) {
+		Tile currentTile = myBoard.getTile(h , w);
+		System.out.println(currentTile);
+		currentTile.setState(TileState.IS_UP);
+	    }
+	}
     }
 
     public void turnTile(int t1Y, int t1X) {
@@ -116,26 +125,22 @@ public class TileActionManager
 	// VIKTIGT BYT METODNAMN!!!!
 	int size = Tile.getTileSize();
 	// size tar inte med SPACE! Därför blir det mysko med mellanrummen
+
 	this.t1X = xCoord / size;
 	this.t1Y = yCoord / size;
 
 	if (t1 == null) {
 	    t1 = gameBoard.getTile(t1Y, t1X);
-	    // Hämtar den första tilen som är tryckt.
 	    t2X = t1X;
 	    t2Y = t1Y;
 	}
 	else if (t2 == null) {
 	    if (t1X != t2X || t1Y != t2Y) {
-		// Om det inte är samma tiles gör den detta.
 		t2 = gameBoard.getTile(t1Y, t1X);
-		// Hämtar den andra tilen som är tryckt.
 		if (t2.getState() == TileState.IS_UP || t2.getState() == TileState.IS_DOWN) {
 		    turnTile(t1Y, t1X);
 		}
-		// Vänder två valda tiles.
 		resetTile();
-		// Sätter valda tiles till null.
 	    }
 	    else {
 		System.out.println("DON'T PRESS THE SAME TILE!");

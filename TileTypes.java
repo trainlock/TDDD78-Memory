@@ -13,8 +13,4 @@ public enum TileTypes
     F,
     G,
     H,
-    /**
-     * BACKSIDE,
-     * OUTSIDE
-     */
 }
