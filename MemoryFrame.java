@@ -12,6 +12,7 @@ public class MemoryFrame extends JFrame implements MouseListener
     private JFrame frame;
     private TileActionManager tileManager;
     private Counter clock = new Counter();
+    private HighscorePanel hsPanel = new HighscorePanel();
     private BoardPanel myBoard;
     public Board gameBoard;
     public boolean boardEnabled;
@@ -19,6 +20,7 @@ public class MemoryFrame extends JFrame implements MouseListener
     private boolean isAllSame;
     private int PANEL_HEIGHT;
     private int counter = 0;
+    public String name;
     final MemoryComponent memoryComp;
 
 
@@ -42,7 +44,8 @@ public class MemoryFrame extends JFrame implements MouseListener
 	frame.setLayout(b);
 
 	frame.add(clock, BorderLayout.NORTH);
-	frame.getContentPane().add(myBoard, BorderLayout.SOUTH);
+	frame.add(hsPanel, BorderLayout.EAST);
+	frame.getContentPane().add(myBoard, BorderLayout.CENTER);
 	frame.getContentPane().addMouseListener(this);
 
 	frame.setResizable(false);
@@ -52,15 +55,6 @@ public class MemoryFrame extends JFrame implements MouseListener
 	run();
     }
 
-    /**
-    void restartGame() {
-	remove(myBoard);
-	BoardPanel newBoard = new BoardPanel(new Board(gameBoard.getHeight(), gameBoard.getWidth()), memoryComp);
-	frame.add(newBoard);
-	revalidate();
-    }
-     */
-
     private void run() {
 	while(isPlaying) {
 
@@ -68,11 +62,34 @@ public class MemoryFrame extends JFrame implements MouseListener
 
 	    if (isAllSame) {
 		clock.stopTimer();
-	   	    JOptionPane.showMessageDialog(this, "You have beaten the game! Congrats CHAMP!");
+		this.name = JOptionPane.showInputDialog(this, "You have beaten the game! Enter your name: ");
+		HighscoreList.gethsL().addScore(name, clock.getTime());
+
 		isPlaying = false;
+
+		Object[] options = {"New Game", "Quit"};
+			int optionChosen = JOptionPane.showOptionDialog(frame.getParent(),
+									"Would you like to start a new game or quit?",
+									null,
+									JOptionPane.YES_NO_OPTION,
+									JOptionPane.QUESTION_MESSAGE,
+									null,
+									options,
+									options[0]);
+			if(optionChosen == 0) {
+			    gameBoard = new Board(4,4);
+			    new MemoryFrame(gameBoard);
+			}
+
+			else if(optionChosen == 1){
+			    System.exit(0);
+			}
+
+	    		}
 	   	}
+
 	 }
-    }
+
 
     private void createMenus() {
 	JButton newGameButton = new JButton("New Game");
@@ -88,13 +105,17 @@ public class MemoryFrame extends JFrame implements MouseListener
 								JOptionPane.QUESTION_MESSAGE,
 								null,
 								options,
-								options[1]);
+								options[0]);
 		if (optionChosen == JOptionPane.YES_OPTION) {
-		    /**
-		    gameBoard.restart();
-		    tileManager.resetTiles(gameBoard);
-		    memoryComp.repaint();
-		     */
+		    //KRASCHAR!!!
+		    frame.dispose();
+		    gameBoard = new Board(4,4);
+		    System.out.println("new");
+		    new MemoryFrame(gameBoard);
+		    System.out.println("game");
+		    }
+		else if (optionChosen == JOptionPane.NO_OPTION) {
+		    System.exit(0);
 		}
 	    }
 	});
@@ -108,7 +129,7 @@ public class MemoryFrame extends JFrame implements MouseListener
 								JOptionPane.QUESTION_MESSAGE,
 								null,
 								options,
-								options[1]);
+								options[0]);
 		if (optionChosen == JOptionPane.YES_OPTION) {
 		    System.exit(0);
 		}

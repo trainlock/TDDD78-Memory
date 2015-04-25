@@ -34,7 +34,8 @@ public class Counter extends JPanel
                     seconds = 0;
                 }
                 seconds++;
-                String time = String.format("%02d:%02d",minutes,seconds);
+
+                String time = String.format("%02d:%02d", minutes, seconds);
                 textField.setText(time);
 	    }
 	};
@@ -42,6 +43,10 @@ public class Counter extends JPanel
 	this.timer = new Timer(1000, doOneStep);
 	timer.setCoalesce(true);
 	timer.start();
+    }
+
+    public int getTime() {
+        return seconds;
     }
 
     public void stopTimer() {
