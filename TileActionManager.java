@@ -2,6 +2,7 @@ package se.liu.ida.linbe810.tddd78.memory;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.logging.Logger;
 
 public class TileActionManager
 {
@@ -9,13 +10,15 @@ public class TileActionManager
     private MemoryComponent memoryComp;
     private Timer clockTimer = null;
     private int t2X, t2Y, t1X, t1Y;
-    private Tile t1, t2;
+    private Tile t1 = null, t2 = null;
     private boolean boardEnabled = true;
     public static final int TIME = 2000;
+    private Logger logger;
 
     public TileActionManager(MemoryComponent memoryComp, Board gameBoard) {
 	this.memoryComp = memoryComp;
 	this.gameBoard = gameBoard;
+	logger = Logger.getLogger(TileActionManager.class.getName());
     }
 
     public void setBoardEnabled(boolean boardEnabled) {
@@ -47,14 +50,13 @@ public class TileActionManager
 	    return true;
 	}
 	return false;
+	//logger.info("Successful control of Tiles!");
     }
 
     public void runTimer(){
 	final Action doOneStep = new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
 
-		// Hur ska vi lyckas få med egna invariabler till actionPerformed
-		// så man slipper upprepa kod??
 		Tile curTile1 = gameBoard.getTile(t1Y, t1X);
 		Tile curTile2 = gameBoard.getTile(t2Y, t2X);
 
@@ -77,16 +79,26 @@ public class TileActionManager
 	t2 = null;
     }
 
+
     public void resetTiles(Board myBoard) {
 	for (int h = 0; h < myBoard.getHeight(); h++) {
 	    for (int w = 0; w < myBoard.getWidth(); w++) {
 		Tile currentTile = myBoard.getTile(h , w);
-		System.out.println(currentTile);
 		currentTile.setState(TileState.IS_UP);
 	    }
 	}
     }
 
+
+
+    /**
+     * Operation which calls a methods to change the color of the se.liu.ida.linbe810.tddd78.memory.Tile
+     * depending on which state is has. It also check to see which if
+     * two Tiles should be repainted.
+     *
+     * @param t1Y	current se.liu.ida.linbe810.tddd78.memory.Tile y-position on the board
+     * @param t1X	current se.liu.ida.linbe810.tddd78.memory.Tile x-position on the board
+     */
     public void turnTile(int t1Y, int t1X) {
 	if (gameBoard.isSameTile(t1, t2) && t1.getState() == TileState.IS_UP && t2.getState() == TileState.IS_UP) {
 	    t1.setState(TileState.IS_SAME_TILE);
@@ -102,16 +114,13 @@ public class TileActionManager
 		memoryComp.fillTile(t1.getState(), t1Y, t1X);
 	    }
 	    if(t1.getState() == TileState.IS_DOWN && t2.getState() == TileState.IS_DOWN){
-		setBoardEnabled(false);
+		this.boardEnabled = false;
 		runTimer();
 	    }
-	    else if (t1.getState() == TileState.IS_SAME_TILE || t2.getState() == TileState.IS_SAME_TILE ||
+	    else if (!(t1.getState() == TileState.IS_SAME_TILE || t2.getState() == TileState.IS_SAME_TILE ||
 		     t1.getState() == TileState.IS_UP && t2.getState() == TileState.IS_DOWN ||
-		     t1.getState() == TileState.IS_DOWN && t2.getState() == TileState.IS_UP) {
-		// Borde tillhöra felhanteringen och Exceptions
-		// Spelplanen ska ej komma åt dessa brickor!
-	    }
-	    else {
+		     t1.getState() == TileState.IS_DOWN && t2.getState() == TileState.IS_UP)) {
+
 		memoryComp.fillTile(t2.getState(), t2Y, t2X);
 		memoryComp.fillTile(t1.getState(), t1Y, t1X);
 		t1.setState(TileState.IS_UP);
@@ -120,11 +129,14 @@ public class TileActionManager
 	}
     }
 
-        // VIKTIGT BYT METODNAMN!!!!
-    public void click(int xCoord, int yCoord) {
-	// VIKTIGT BYT METODNAMN!!!!
+    /**
+     * Vad metoden gör!
+     *
+     * @param xCoord	the x-coordinate of the mouse where it is pressed.
+     * @param yCoord	the y-coordinate of the mouse where it is pressed
+     */
+    public void assignCoordsToTile(int xCoord, int yCoord) {
 	int size = Tile.getTileSize();
-	// size tar inte med SPACE! Därför blir det mysko med mellanrummen
 
 	this.t1X = xCoord / size;
 	this.t1Y = yCoord / size;
@@ -143,8 +155,7 @@ public class TileActionManager
 		resetTile();
 	    }
 	    else {
-		System.out.println("DON'T PRESS THE SAME TILE!");
-		// ÄNDRA TEXTEN!!!
+		System.out.println("Please don't press the same tile twice.");
 		resetTile();
 	    }
 	}

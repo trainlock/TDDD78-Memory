@@ -1,4 +1,5 @@
 package se.liu.ida.linbe810.tddd78.memory;
+
 /**
  * Contains the STATEs that the tiles can have.
  */

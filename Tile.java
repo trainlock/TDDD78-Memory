@@ -4,26 +4,28 @@ import java.awt.Color;
 
 public class Tile
 {
-    private final static int SIZE = 100;
+    private final static int TILE_SIZE = 100;
     private TileTypes type;
     private TileState state;
-    private Color frontsideColour;
+    //private Color frontsideColour;
     private Color backsideColour;
 
-    public Tile(TileTypes type, Color frontsideColour, Color backsideColour, TileState state) {
+    public Tile(TileTypes type, Color backsideColour, TileState state) {
         this.type = type;
-        this.frontsideColour = frontsideColour;
+        //this.frontsideColour = frontsideColour;
         this.backsideColour = backsideColour;
         this.state = state;
     }
 
-    public static int getTileSize() {
-        return SIZE;
+    public final static int getTileSize() {
+        return TILE_SIZE;
     }
 
-    public TileTypes getTileType(){
-        return type;
-    }
+// --Commented out by Inspection START (2015-04-28 10:36):
+//    public se.liu.ida.linbe810.tddd78.memory.TileTypes getTileType(){
+//        return type;
+//    }
+// --Commented out by Inspection STOP (2015-04-28 10:36)
 
     public TileState getState() {
         return state;
@@ -33,8 +35,8 @@ public class Tile
         this.state = state;
     }
 
-    public Color getFrontsideColour() {
-        return frontsideColour;
+    public TileTypes getTileType() {
+        return type;
     }
 
     public Color getBacksideColour() {
@@ -48,7 +50,7 @@ public class Tile
         Tile that = (Tile) other;
 
         return this.type == that.type &&
-               this.frontsideColour.equals(that.frontsideColour) &&
+               //this.frontsideColour.equals(that.frontsideColour) &&
                this.backsideColour.equals(that.backsideColour);
     }
 }

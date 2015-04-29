@@ -3,9 +3,16 @@ package se.liu.ida.linbe810.tddd78.memory;
 import java.awt.Color;
 
 import java.util.ArrayList;
-import java.util.Collection;
+//import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
+
+/**
+ * This class is used to create the gameboard.
+ * Generates an dubblearray cointaining different types of Tiles in a random order.
+ * The number of tiles depends on how many tileTypes that exist.
+ */
 
 public class Board
 {
@@ -14,10 +21,12 @@ public class Board
     private List<Tile> listOfTiles = null;
     private List<Color> listOfColours = null;
     private List<TileTypes> listOfTypes = null;
+    private Logger logger;
 
     public Board(int height, int width) {
 	this.height = height;
 	this.width = width;
+	logger = Logger.getLogger(Board.class.getName());
 
 	setListOfTypes();
 	setListOfColours();
@@ -35,9 +44,11 @@ public class Board
 	    }
 	}
 	else {
-	    // FELHANTERING!!!
-	    System.out.println("Incorrect size of Board!");
+	    logger.info("Incorrect construction of board!");
 	}
+
+	logger.info("Construction successful!");
+
     }
 
     public int getHeight() {
@@ -53,16 +64,19 @@ public class Board
     }
 
     // Gör om till en generics
+    // Raw use of collection
+    /**
     public int getListSize(Collection list){
 	return list.size();
     }
+     */
 
     public void createTiles() {
 	listOfTiles = new ArrayList<Tile>();
-	TileTypes type = getTileTypeFromList();
-	for (Color colour : listOfColours) {
-	    Tile tile1 = new Tile(type, colour, Color.GRAY, TileState.IS_UP);
-	    Tile tile2 = new Tile(type, colour, Color.GRAY, TileState.IS_UP);
+	//se.liu.ida.linbe810.tddd78.memory.TileTypes type = getTileTypeFromList();
+	for (TileTypes tileType : listOfTypes) {
+	    Tile tile1 = new Tile(tileType, Color.GRAY, TileState.IS_UP);
+	    Tile tile2 = new Tile(tileType, Color.GRAY, TileState.IS_UP);
 	    listOfTiles.add(tile1);
 	    listOfTiles.add(tile2);
 	}
@@ -72,14 +86,16 @@ public class Board
 	listOfTypes = new ArrayList<TileTypes>();
 	Collections.addAll(listOfTypes, TileTypes.values());
     }
-    public TileTypes getTileTypeFromList() {
+    /**
+    public se.liu.ida.linbe810.tddd78.memory.TileTypes getTileTypeFromList() {
 	int size = getListSize(listOfTypes);
-	TileTypes type = null;
+	se.liu.ida.linbe810.tddd78.memory.TileTypes type = null;
 	for (int i = 0; i < size; i++) {
 	    type = listOfTypes.get(i);
 	}
 	return type;
     }
+     */
 
     public void setListOfColours() {
 	listOfColours = new ArrayList<Color>();
