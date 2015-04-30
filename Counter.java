@@ -36,6 +36,9 @@ public class Counter extends JPanel
         return textField;
     }
 
+    /**
+     * Runs the timer
+     */
     public void runTimer(){
 	final Action doOneStep = new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {

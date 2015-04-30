@@ -1,17 +1,20 @@
 package se.liu.ida.linbe810.tddd78.memory;
 
 import Highscores.HighscoreManager;
+import java.io.IOException;
 import Highscores.HighscorePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
+import java.awt.event.KeyEvent;
 
 
-public class MemoryFrame extends JFrame implements MouseListener
+public class MemoryFrame extends JFrame implements MouseListener, KeyListener
 {
     private JFrame frame;
     private TileActionManager tileManager;
@@ -20,6 +23,7 @@ public class MemoryFrame extends JFrame implements MouseListener
     private boolean isPlaying;
     private int counter = 0;
     private Logger logger;
+
 
     // for the highscore.
     private HighscorePanel hsPanel = new HighscorePanel();
@@ -45,29 +49,46 @@ public class MemoryFrame extends JFrame implements MouseListener
 	LayoutManager bL = new BorderLayout();
 	frame.setLayout(bL);
 
+	//frame.add(hsPanel, BorderLayout.EAST);
 	frame.add(clock, BorderLayout.NORTH);
-	frame.add(hsPanel, BorderLayout.EAST);
+
 	frame.getContentPane().add(myBoard, BorderLayout.CENTER);
 	frame.getContentPane().addMouseListener(this);
+
+	frame.setFocusable(true);
+	frame.addKeyListener(this);
 
 	frame.setResizable(false);
 	frame.pack();
 	frame.setVisible(true);
 
 	run();
+	logger.info("Construction of board successful!");
     }
 
+    /**
+     * Runs while the game is playing
+     */
     private void run() {
 	while(isPlaying) {
 
 	    final boolean isAllSame = tileManager.isAllSameTile();
 
 	    if (isAllSame) {
+		logger.info("All pair of tiles match");
 		clock.stopTimer();
 		final String name = JOptionPane.showInputDialog(this, "You have beaten the game! Enter your name: ");
+		hsPanel.setWinnerInfo(name, clock.getTime());
 
 		// Generates the highscore list.
-		HighscoreManager.createHighscoreManager().addScore(name, clock.getTime());
+		/**
+		try {
+		    HighscoreManager.getHighscoreManager().addScore(name, clock.getTime());
+		} catch (IOException e) {
+		    e.printStackTrace();
+		 }
+		 */
+
 		logger.info("Game finished!");
 
 		isPlaying = false;
@@ -88,6 +109,13 @@ public class MemoryFrame extends JFrame implements MouseListener
 
 			else if(optionChosen == 1){
 			    System.exit(0);
+			    /**
+			    try {
+				HighscoreManager.getHighscoreManager().cleanUp();
+			    } catch (IOException e) {
+				e.printStackTrace();
+			    }
+			     */
 			}
 
 	    		}
@@ -97,36 +125,7 @@ public class MemoryFrame extends JFrame implements MouseListener
 
 
     private void createMenus() {
-	//JButton newGameButton = new JButton("New Game");
 	JButton quitButton = new JButton("Quit");
-
-	/**
-	newGameButton.setAction(new AbstractAction() {
-	    @Override public void actionPerformed(ActionEvent e) {
-		Object[] options = {"Yes", "No"};
-		int optionChosen = JOptionPane.showOptionDialog(frame.getParent(),
-								"Would you like to start a new game?",
-								"New game",
-								JOptionPane.YES_NO_OPTION,
-								JOptionPane.QUESTION_MESSAGE,
-								null,
-								options,
-								options[0]);
-		if (optionChosen == JOptionPane.YES_OPTION) {
-		    // KRASCHAR!!!
-		    // frame.dispose();
-		    isPlaying = false;
-		    gameBoard = new se.liu.ida.linbe810.tddd78.memory.Board(4,4);
-		    System.out.println("new");
-		    new se.liu.ida.linbe810.tddd78.memory.MemoryFrame(gameBoard);
-		    System.out.println("game");
-		    }
-		else if (optionChosen == JOptionPane.NO_OPTION) {
-		    System.exit(0);
-		}
-	    }
-	});
-	 */
 
 	quitButton.setAction(new AbstractAction() {
 	    @Override public void actionPerformed(ActionEvent e) {
@@ -148,11 +147,9 @@ public class MemoryFrame extends JFrame implements MouseListener
 	    }
 	});
 
-	//newGameButton.setText("New Game");
 	quitButton.setText("Quit");
 
 	JMenuBar menuBar = new JMenuBar();
-	//menuBar.add(newGameButton);
 	menuBar.add(Box.createHorizontalGlue());
 	menuBar.add(quitButton);
 	frame.setJMenuBar(menuBar);
@@ -171,10 +168,15 @@ public class MemoryFrame extends JFrame implements MouseListener
 	    int yCoord = e.getY();
 
 	    if (yCoord - panelHeight >= 0) {
-		tileManager.assignCoordsToTile(xCoord, (yCoord - panelHeight));
-		isPlaying = true;
-		if(counter == 0){
-		    counter++;
+		try {
+		    tileManager.assignCoordsToTile(xCoord, (yCoord - panelHeight));
+		    isPlaying = true;
+		    if (counter == 0) {
+			counter++;
+		    }
+		}
+		catch (ArrayIndexOutOfBoundsException e1) {
+		    logger.info("Array index out of bounds");
 		}
 	    }
 	}
@@ -189,6 +191,20 @@ public class MemoryFrame extends JFrame implements MouseListener
     }
 
     @Override public void mouseExited(final MouseEvent e) {
+
+    }
+
+    @Override public void keyTyped(final KeyEvent e) {
+    }
+
+    @Override public void keyPressed(KeyEvent e) {
+	int key = e.getKeyCode();
+	if(key == KeyEvent.VK_Q) {
+	    System.exit(0);
+	}
+    }
+
+    @Override public void keyReleased(final KeyEvent e) {
 
     }
 }

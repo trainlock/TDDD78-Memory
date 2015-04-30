@@ -43,6 +43,11 @@ public class Tile
         return backsideColour;
     }
 
+    /**
+     Checks whether this class is equal to another
+     * @param other The other class which is compare to this class
+     * @return True if the classes are equal, else returns false
+     */
     @Override
     public boolean equals(Object other) {
         if (other == null || other.getClass() != this.getClass()) return false;

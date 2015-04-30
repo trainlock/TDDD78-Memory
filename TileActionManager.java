@@ -50,7 +50,6 @@ public class TileActionManager
 	    return true;
 	}
 	return false;
-	//logger.info("Successful control of Tiles!");
     }
 
     public void runTimer(){
@@ -78,18 +77,6 @@ public class TileActionManager
 	t1 = null;
 	t2 = null;
     }
-
-
-    public void resetTiles(Board myBoard) {
-	for (int h = 0; h < myBoard.getHeight(); h++) {
-	    for (int w = 0; w < myBoard.getWidth(); w++) {
-		Tile currentTile = myBoard.getTile(h , w);
-		currentTile.setState(TileState.IS_UP);
-	    }
-	}
-    }
-
-
 
     /**
      * Operation which calls a methods to change the color of the se.liu.ida.linbe810.tddd78.memory.Tile

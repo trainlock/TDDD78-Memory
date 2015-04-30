@@ -55,7 +55,11 @@ public class MemoryComponent extends JComponent
 	int height = SQUARE_SIZE * gameBoard.getHeight() + SPACE;
         return new Dimension(width, height);
     }
-
+    /**
+     * Tries to load the given images into the image map
+     * @param path The adress of the image
+     * @return if found, the URL for the image, if not - simply returns
+     */
     private static ImageIcon loadImageResource(String path) {
                   try {
                       URL resourceUrl = MemoryComponent.class.getClassLoader().getResource(path);
@@ -76,10 +80,16 @@ public class MemoryComponent extends JComponent
     @Override
     public void paintComponent(Graphics g) {
 	super.paintComponent(g);
-        fillBoardColour(gameBoard, g);
+        fillBoardImages(gameBoard, g);
     }
 
-    public void fillBoardColour(Board gameBoard, Graphics g) {
+    /**
+     * Takes a number and returns its square root.
+     *
+     * @param gameBoard     the board of the game, with all the tiles
+     * @param g             Graphics object
+     */
+    public void fillBoardImages(Board gameBoard, Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 
         int height = gameBoard.getHeight();
@@ -109,6 +119,13 @@ public class MemoryComponent extends JComponent
         }
     }
 
+    /**
+     * Draws a space between the tiles
+     *
+     * @param row       The y-coordinate of the chosen tile
+     * @param column    The x-coordinate of the chosen tile
+     * @param g         Graphics object
+     */
     public void drawSpace(int row, int column, Graphics g) {
         int height = gameBoard.getHeight();
         // height == row == y
@@ -126,6 +143,13 @@ public class MemoryComponent extends JComponent
         }
     }
 
+    /**
+     * Fills the tiles with its corresponding image.
+     *
+     * @param state     The state of the current tile
+     * @param row       The y-coordinate of the chosen tile
+     * @param column    The x-coordinate of the chosen tile
+     */
     public void fillTile(TileState state, int row, int column) {
         Graphics g = this.getGraphics();
         Graphics2D g2d = (Graphics2D) g;

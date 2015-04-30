@@ -59,18 +59,20 @@ public class Board
 	return width;
     }
 
+    /**
+     * Takes x and y to return the tile with that position
+     *
+     * @param height The y-coordinate of the chosen tile
+     * @param width The x-coordinate of the chosen tile
+     * @return The tile with the given x- and y-coordinates
+     */
     public Tile getTile(int height, int width) {
 	return tiles[height][width];
     }
 
-    // Gör om till en generics
-    // Raw use of collection
     /**
-    public int getListSize(Collection list){
-	return list.size();
-    }
+     * Creates all tiles
      */
-
     public void createTiles() {
 	listOfTiles = new ArrayList<Tile>();
 	//se.liu.ida.linbe810.tddd78.memory.TileTypes type = getTileTypeFromList();
@@ -82,6 +84,9 @@ public class Board
 	}
     }
 
+    /**
+     * Creates a list of all the tiletypes
+     */
     public void setListOfTypes() {
 	listOfTypes = new ArrayList<TileTypes>();
 	Collections.addAll(listOfTypes, TileTypes.values());
@@ -117,6 +122,10 @@ public class Board
 	return t1.equals(t2);
     }
 
+    /**
+     * Checks to see there is a valid board
+     * @return whether the board is valid or not
+     */
     public boolean checkBoardSize() {
 	if ((height * width) % 2 == 0 ) {
 	    return true;
@@ -124,3 +133,11 @@ public class Board
 	return false;
     }
 }
+
+    // Gör om till en generics
+    // Raw use of collection
+    /**
+    public int getListSize(Collection list){
+	return list.size();
+    }
+     */
